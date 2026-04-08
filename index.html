@@ -6,33 +6,741 @@
   <title>GrateTogether — A Value Sensitive Redesign</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e0e;
+      --bg-card: #161616;
+      --bg-card-hover: #1c1c1c;
+      --text: #e8e4df;
+      --text-muted: #a09a92;
+      --green: #4caf7c;
+      --green-dim: rgba(76,175,124,0.12);
+      --red: #e8734a;
+      --red-dim: rgba(232,115,74,0.12);
+      --accent-line: #2a2a2a;
+      --serif: 'DM Serif Display', serif;
+      --sans: 'DM Sans', sans-serif;
+      --max-w: 1120px;
+      --section-py: clamp(4rem, 8vw, 7rem);
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      background-color: #0e0e0e;
-      color: #e8e4df;
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
     }
 
-    h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      line-height: 1.2;
+    img { max-width: 100%; display: block; }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ===== UTILITIES ===== */
+    .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
+    .section-pad { padding-top: var(--section-py); padding-bottom: var(--section-py); }
+    .label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
     }
+    .label--green { color: var(--green); }
+    .label--red { color: var(--red); }
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+    h3 {
+      font-family: var(--serif);
+      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+    .body-text { max-width: 680px; color: var(--text-muted); margin-bottom: 2.5rem; }
+    .divider { border: none; border-top: 1px solid var(--accent-line); margin: 0; }
+
+    /* ===== GRID ===== */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-line);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: background 0.3s;
+    }
+    .card:hover { background: var(--bg-card-hover); }
+    .card--green-top { border-top: 3px solid var(--green); }
+    .card--red-top { border-top: 3px solid var(--red); }
+    .card__tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .card__tag--green { color: var(--green); }
+    .card__tag--red { color: var(--red); }
+    .card__desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
+    .card__source { color: var(--text-muted); font-size: 0.82rem; font-style: italic; border-left: 2px solid var(--accent-line); padding-left: 0.75rem; margin-top: 1rem; }
+
+    /* ===== PILLS ===== */
+    .pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+    .pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+    .pill--green { background: var(--green-dim); color: var(--green); }
+    .pill--red { background: var(--red-dim); color: var(--red); }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(14,14,14,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--accent-line);
+    }
+    nav .wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+
+    @media (max-width: 720px) {
+      .nav-links {
+        display: none; flex-direction: column; gap: 0;
+        position: absolute; top: 56px; left: 0; right: 0;
+        background: rgba(14,14,14,0.97); border-bottom: 1px solid var(--accent-line);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 0.85rem 1.5rem; display: block; }
+      .nav-toggle { display: block; }
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding-top: 56px;
+    }
+    .hero__label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5.5vw, 3.75rem);
+      line-height: 1.15;
+      max-width: 780px; margin: 0 auto 1.5rem;
+    }
+    .hero h1 em { font-style: italic; color: var(--green); }
+    .hero h1 em.red { color: var(--red); }
+    .hero__sub {
+      max-width: 600px; margin: 0 auto 2.5rem;
+      color: var(--text-muted); font-size: 1.05rem; line-height: 1.7;
+    }
+    .meta-bar {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;
+      font-size: 0.78rem; color: var(--text-muted);
+    }
+    .meta-bar dt { font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text); font-size: 0.68rem; margin-bottom: 0.15rem; }
+
+    /* ===== STAT CALLOUTS ===== */
+    .stats { display: flex; gap: 1.5rem; margin: 2rem 0; flex-wrap: wrap; }
+    .stat {
+      flex: 1; min-width: 140px;
+      background: var(--bg-card);
+      border: 1px solid var(--accent-line);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .stat__number {
+      font-family: var(--serif);
+      font-size: 2rem;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .stat__label { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ===== BLOCKQUOTE ===== */
+    blockquote {
+      border-left: 3px solid var(--red);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--text);
+      background: var(--red-dim);
+      border-radius: 0 8px 8px 0;
+    }
+    blockquote cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      font-style: normal;
+      color: var(--text-muted);
+    }
+
+    /* ===== TENSION CARDS ===== */
+    .tension-card { margin-bottom: 1.5rem; }
+    .tension-vs {
+      display: flex; align-items: center; gap: 0.75rem;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .tension-vs .pill { font-size: 0.8rem; }
+    .tension-vs__vs { font-weight: 700; font-size: 0.75rem; color: var(--text-muted); }
+    .tension-card__resolution {
+      margin-top: 1rem; padding-top: 1rem;
+      border-top: 1px solid var(--accent-line);
+      font-size: 0.92rem; color: var(--text-muted);
+    }
+    .tension-card__resolution strong { color: var(--text); }
+
+    /* ===== BEFORE / AFTER ===== */
+    .ba {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem;
+      align-items: center; margin-bottom: 3rem;
+    }
+    .ba__arrow {
+      font-size: 2rem; color: var(--green); line-height: 1;
+    }
+    @media (max-width: 720px) {
+      .ba { grid-template-columns: 1fr; text-align: center; }
+      .ba__arrow { transform: rotate(90deg); justify-self: center; }
+    }
+    .ba__item h4 { font-family: var(--serif); margin-bottom: 0.5rem; }
+    .ba__item p { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* ===== MODE CARDS ===== */
+    .mode-card--safe { background: rgba(76,175,124,0.06); border-color: rgba(76,175,124,0.2); }
+    .mode-card--pro  { background: rgba(232,115,74,0.06); border-color: rgba(232,115,74,0.2); }
+    .mode-card ul { list-style: none; padding: 0; }
+    .mode-card li {
+      position: relative; padding-left: 1.25rem; font-size: 0.92rem;
+      color: var(--text-muted); margin-bottom: 0.4rem;
+    }
+    .mode-card li::before {
+      content: ''; position: absolute; left: 0; top: 0.55rem;
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+    .mode-card--safe li::before { background: var(--green); }
+    .mode-card--pro li::before  { background: var(--red); }
+
+    /* ===== PROTOTYPE EMBED ===== */
+    .proto-wrap {
+      border: 1px solid var(--accent-line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg-card);
+    }
+    .proto-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.65rem 1.25rem;
+      border-bottom: 1px solid var(--accent-line);
+      font-size: 0.8rem;
+    }
+    .proto-bar span { font-weight: 700; color: var(--text); }
+    .proto-bar a { font-size: 0.78rem; }
+    .proto-wrap iframe { width: 100%; height: 600px; border: none; display: block; }
+    @media (max-width: 720px) { .proto-wrap iframe { height: 400px; } }
+
+    /* ===== PLACEHOLDER ===== */
+    .placeholder {
+      border: 2px dashed var(--accent-line);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 10px,
+        rgba(42,42,42,0.3) 10px,
+        rgba(42,42,42,0.3) 20px
+      );
+    }
+    .placeholder h4 { font-family: var(--serif); margin-bottom: 0.75rem; }
+    .placeholder p { color: var(--text-muted); font-size: 0.9rem; max-width: 550px; margin: 0 auto; }
+
+    /* ===== REFLECTION CARDS ===== */
+    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .reflection-grid .card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    @media (max-width: 720px) { .reflection-grid { grid-template-columns: 1fr; } }
+    .reflection-num {
+      font-family: var(--serif);
+      font-size: 1.75rem;
+      color: var(--accent-line);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ===== REFERENCES ===== */
+    .ref-list { list-style: none; padding: 0; }
+    .ref-list li {
+      font-size: 0.85rem; color: var(--text-muted);
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--accent-line);
+      line-height: 1.6;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--accent-line);
+      padding: 2rem 0;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* stagger children */
+    .stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+    .stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
+    .stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
+    .stagger > .reveal:nth-child(5) { transition-delay: 0.4s; }
+
+    /* ===== SPEC DETAILS ===== */
+    details {
+      margin-top: 2rem;
+      border: 1px solid var(--accent-line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    summary {
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text);
+      background: var(--bg-card);
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: '+ '; color: var(--green); }
+    details[open] summary::before { content: '- '; }
+    .spec-inner {
+      padding: 1.25rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      background: var(--bg);
+    }
+    .spec-inner strong { color: var(--text); }
   </style>
 </head>
 <body>
-  <h1>GrateTogether — Coming Soon</h1>
+
+<!-- ========== NAV ========== -->
+<nav>
+  <div class="wrap">
+    <span class="nav-logo">GrateTogether</span>
+    <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#tensions">Tensions</a></li>
+      <li><a href="#design">Design</a></li>
+      <li><a href="#prototype">Prototype</a></li>
+      <li><a href="#feedback">Feedback</a></li>
+      <li><a href="#reflection">Reflection</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="overview">
+  <div class="wrap stagger">
+    <p class="hero__label reveal">GBDA 306 &mdash; Value Sensitive Design Case Study</p>
+    <h1 class="reveal">Redesigning the cheese grater for <em>safety</em> and <em class="red">mastery</em></h1>
+    <p class="hero__sub reveal">A semester-long exploration of how Value Sensitive Design can transform an everyday kitchen tool into one that serves both children learning to cook and enthusiasts chasing flavour perfection.</p>
+    <dl class="meta-bar reveal">
+      <div><dt>Designer</dt><dd>Charlie Cilla</dd></div>
+      <div><dt>Timeline</dt><dd>Jan &ndash; Apr 2026</dd></div>
+      <div><dt>Product</dt><dd>GrateTogether Workstation</dd></div>
+      <div><dt>Framework</dt><dd>Value Sensitive Design</dd></div>
+    </dl>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ========== SECTION 1: THE PROBLEM ========== -->
+<section class="section-pad" id="problem">
+  <div class="wrap">
+    <p class="label reveal">01 &mdash; The Problem</p>
+    <h2 class="reveal">One tool, two very different users</h2>
+    <p class="body-text reveal">The standard box grater hasn't changed in decades. It works for adults but exposes blades at all times, provides no guidance, and prevents independent use by children. For enthusiasts, it offers limited texture control and no path to mastery. <strong>Core tension:</strong> the sharper a grater is, the better it performs&nbsp;&mdash; and the more dangerous it becomes.</p>
+
+    <div class="grid-2">
+      <!-- S1 card -->
+      <div class="card card--green-top reveal">
+        <p class="card__tag card__tag--green">Stakeholder 1</p>
+        <h3>Children Cooking at Home</h3>
+        <p class="card__desc">Kids aged 8&ndash;12 who want to participate in meal preparation. They already use graters in real kitchens&nbsp;&mdash; the design has to work with that reality.</p>
+        <div class="pills">
+          <span class="pill pill--green">Safety</span>
+          <span class="pill pill--green">Independence</span>
+          <span class="pill pill--green">Self-Development</span>
+        </div>
+        <p class="card__source">"Kids can feel proud being part of the cooking process, but they're also the most likely to cut themselves or mishandle a grater." &mdash; A1</p>
+      </div>
+      <!-- S2 card -->
+      <div class="card card--red-top reveal">
+        <p class="card__tag card__tag--red">Stakeholder 2</p>
+        <h3>Cheese &amp; Cooking Enthusiasts</h3>
+        <p class="card__desc">Home cooks who care deeply about flavour, texture, and technique. Grating is part of the sensory pleasure of cooking, not just a chore.</p>
+        <div class="pills">
+          <span class="pill pill--red">Mastery</span>
+          <span class="pill pill--red">Hedonism</span>
+          <span class="pill pill--red">Happiness</span>
+        </div>
+        <p class="card__source">"They chase pleasure in flavour and texture, and they want mastery, because cooking is a skill they're trying to get better at." &mdash; A1</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ========== SECTION 2: RESEARCH ========== -->
+<section class="section-pad" id="research">
+  <div class="wrap">
+    <p class="label reveal">02 &mdash; Research &amp; Validation</p>
+    <h2 class="reveal">Grounding values in evidence</h2>
+    <p class="body-text reveal">Values were validated through secondary research (S1) and a semi-structured interview (S2). Both shifted the designer's assumptions.</p>
+
+    <div class="grid-2">
+      <!-- S1 evidence -->
+      <div class="card card--green-top reveal">
+        <p class="card__tag card__tag--green">S1 &mdash; Children &mdash; Injury Data</p>
+        <h3>The grater is not the safer option</h3>
+        <p class="card__desc">Parents rate permission for cheese graters and sharp knives at nearly identical levels&nbsp;&mdash; both with a mean of <strong>0.86</strong> (SD&nbsp;0.36). The grater sits right beside a sharp knife in real household practice.</p>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat__number">0.17</div>
+            <div class="stat__label">Cut proportion (grater, all ages)</div>
+          </div>
+          <div class="stat">
+            <div class="stat__number">0.86</div>
+            <div class="stat__label">Permission mean (grater = knife)</div>
+          </div>
+          <div class="stat">
+            <div class="stat__number">0.67</div>
+            <div class="stat__label">Avg injuries (per child)</div>
+          </div>
+        </div>
+
+        <p class="card__desc" style="margin-top:1rem;">These numbers stay the same for older children&nbsp;&mdash; the hazard does not fade with age.</p>
+        <p class="card__source">Source: Amir, M. (2024). <em>Kids in the kitchen</em> (Master's thesis, University of Guelph).</p>
+        <p class="card__desc" style="margin-top:1rem; font-weight:500; color:var(--text);">Key insight: Kids already use graters. Safety can't mean preventing use&nbsp;&mdash; it means designing around real household behaviour.</p>
+      </div>
+
+      <!-- S2 evidence -->
+      <div class="card card--red-top reveal">
+        <p class="card__tag card__tag--red">S2 &mdash; Enthusiasts &mdash; Interview</p>
+        <h3>Mastery through control &amp; confidence</h3>
+        <p class="card__desc">Semi-structured interview with an avid home cook and cheese enthusiast. The participant described cheese in emotional and sensory terms, confirming hedonism and happiness as core values.</p>
+
+        <blockquote>
+          "I get a bit nervous when the piece I'm grating gets small, and my fingers get close to the blade. But it doesn't stop me. I feel pretty brave when I grate something that close."
+          <cite>&mdash; K, Interview Participant</cite>
+        </blockquote>
+
+        <p class="card__desc" style="margin-top:1rem; font-weight:500; color:var(--text);">Key insight: Mastery is expressed through control and confidence&nbsp;&mdash; accepting a bit of risk because it's part of doing something enjoyable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ========== SECTION 3: TENSIONS ========== -->
+<section class="section-pad" id="tensions">
+  <div class="wrap">
+    <p class="label reveal">03 &mdash; Value Tensions</p>
+    <h2 class="reveal">Tensions aren't flaws&nbsp;&mdash; they're the problem worth solving</h2>
+    <p class="body-text reveal">VSD teaches that value conflicts are not evidence of a flawed design. They're what make the problem meaningful. The challenge is negotiating them thoughtfully. <span style="color:var(--text-muted); font-size:0.88rem;">(Friedman &amp; Hendry, 2019; Van de Poel, 2013)</span></p>
+
+    <!-- Tension 1 -->
+    <div class="card tension-card reveal">
+      <h3>Safety vs. Mastery</h3>
+      <div class="tension-vs">
+        <span class="pill pill--green">S1 Safety</span>
+        <span class="tension-vs__vs">VS</span>
+        <span class="pill pill--red">S2 Mastery</span>
+      </div>
+      <p class="card__desc">Sharper blades and greater control improve the enthusiast's experience, but the same qualities make the tool dangerous for children. This can't be solved in a single universal configuration.</p>
+      <div class="tension-card__resolution">
+        <strong>Resolution:</strong> A dual-mode design&nbsp;&mdash; two legitimate states of the same object. Safe Mode prioritizes protection; Pro Mode prioritizes performance. The tension becomes visible and intentional rather than hidden.
+      </div>
+    </div>
+
+    <!-- Tension 2 -->
+    <div class="card tension-card reveal">
+      <h3>Independence vs. Safety</h3>
+      <div class="tension-vs">
+        <span class="pill pill--green">Independence</span>
+        <span class="tension-vs__vs">VS</span>
+        <span class="pill pill--green">Safety</span>
+      </div>
+      <p class="card__desc">Children want to participate and feel capable, but more freedom naturally introduces more risk. This is an internal tension within Stakeholder&nbsp;1.</p>
+      <div class="tension-card__resolution">
+        <strong>Resolution:</strong> Guided independence&nbsp;&mdash; the child acts, but the object sets guardrails. Enclosed feed paths, structured pushers, and visual cues let kids build skills without losing safety.
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ========== SECTION 4: DESIGN EVOLUTION ========== -->
+<section class="section-pad" id="design">
+  <div class="wrap">
+    <p class="label reveal">04 &mdash; Design Evolution</p>
+    <h2 class="reveal">From box grater to dual-mode workstation</h2>
+    <p class="body-text reveal">The biggest shift was moving from a handheld grater to a countertop workstation with two distinct modes. Instead of burying values in a manual, the object communicates them directly through its form and constraints.</p>
+
+    <!-- Before / After -->
+    <div class="ba reveal">
+      <div class="ba__item">
+        <h4>Before&nbsp;&mdash; Standard Box Grater</h4>
+        <p>Blades exposed at all times. No guidance or structure. Prevents independent use by children. Limited texture control. Values invisible in form.</p>
+      </div>
+      <div class="ba__arrow">&rarr;</div>
+      <div class="ba__item">
+        <h4>After&nbsp;&mdash; GrateTogether</h4>
+        <p>Dual-mode countertop workstation. Values embodied in physical form. Mode switching makes the value trade-off visible and intentional.</p>
+      </div>
+    </div>
+
+    <!-- Mode cards -->
+    <div class="grid-2">
+      <div class="card mode-card mode-card--safe reveal">
+        <p class="card__tag card__tag--green">Safe Mode &mdash; Children (8&ndash;12)</p>
+        <h3>Guided &amp; Protected</h3>
+        <ul>
+          <li>Enclosed grating channel with shutter</li>
+          <li>Captive fingertip-safe pusher</li>
+          <li>End-stop preserves safe leftover stub</li>
+          <li>Bin-present interlock for operation</li>
+          <li>Green pictogram cues (load &rarr; push &rarr; collect)</li>
+          <li>Stable non-slip base</li>
+        </ul>
+      </div>
+      <div class="card mode-card mode-card--pro reveal">
+        <p class="card__tag card__tag--red">Pro Mode &mdash; Enthusiasts</p>
+        <h3>Open &amp; Precise</h3>
+        <ul>
+          <li>Fully exposed grating surface</li>
+          <li>Direct tactile control over angle &amp; pressure</li>
+          <li>Swappable precision blade cartridges</li>
+          <li>Fine / coarse texture control</li>
+          <li>Brushed stainless &amp; premium feel</li>
+          <li>Ergonomic 15&deg; handle angle</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Expandable spec details -->
+    <details class="reveal">
+      <summary>Design Specification Details</summary>
+      <div class="spec-inner">
+        <strong>Product:</strong> GrateTogether&nbsp;&mdash; Dual-mode countertop cheese grater workstation<br>
+        <strong>Form:</strong> Upright trapezoid, wider base narrower top, soft radii. Height &asymp; 2.2&times; body width.<br>
+        <strong>Funnel:</strong> Rounded cylindrical/flared, centered, 45&ndash;50% of base width.<br>
+        <strong>Handles:</strong> One per side, integrated ergonomic loop, dark charcoal slightly rubberized. Span 55&ndash;65% of body height.<br>
+        <strong>Materials:</strong> Matte dark gray/charcoal body, muted green safe cues, brushed stainless grating plate, clear collection bin.<br>
+        <strong>Mode Switch:</strong> Upper front control area, labeled SAFE (green) / PRO (red-dark), mechanically linked to shutter + pusher + bin latch.<br>
+        <strong>Safe Mode:</strong> Shutter closed/latched, pusher captive along guided channel, bin must be inserted to operate. Pro exposure mechanically blocked.<br>
+        <strong>Pro Mode:</strong> Shutter retracts, plate fully exposed, pusher parks or removed. Bin optional.
+      </div>
+    </details>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ========== SECTION 5: PROTOTYPE ========== -->
+<section class="section-pad" id="prototype">
+  <div class="wrap">
+    <p class="label reveal">05 &mdash; Interactive Prototype</p>
+    <h2 class="reveal">Explore the 3D model</h2>
+    <p class="body-text reveal">The interactive prototype allows switching between Safe Mode and Pro Mode, with activation animations showing cheese interaction. Built with Three.js and React Three Fiber.</p>
+
+    <div class="proto-wrap reveal">
+      <div class="proto-bar">
+        <span>GrateTogether&nbsp;&mdash; 3D Prototype</span>
+        <a href="https://doost44.github.io/3D-Cheese-Grater/" target="_blank" rel="noopener">Open Full Screen &nearr;</a>
+      </div>
+      <iframe
+        src="https://doost44.github.io/3D-Cheese-Grater/"
+        loading="lazy"
+        title="GrateTogether Interactive 3D Prototype"
+        allow="accelerometer; gyroscope"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ========== SECTION 6: FEEDBACK ========== -->
+<section class="section-pad" id="feedback">
+  <div class="wrap">
+    <p class="label reveal">06 &mdash; Stakeholder Feedback &amp; Refinement</p>
+    <h2 class="reveal">Testing with real people</h2>
+    <p class="body-text reveal">Feedback methods from A3 were carried out&nbsp;&mdash; showing the prototype to real users and collecting structured feedback.</p>
+
+    <div class="placeholder reveal">
+      <h4>Your Feedback Content Goes Here</h4>
+      <p>Add your stakeholder feedback methods, key quotes, observations, and the specific design changes you made in response. Include before/after comparisons of refinements.</p>
+    </div>
+
+    <div style="margin-top:2rem; color:var(--text-muted); font-size:0.88rem;" class="reveal">
+      <strong style="color:var(--text);">Planned sub-sections:</strong>
+      <ul style="list-style:disc; padding-left:1.25rem; margin-top:0.5rem; line-height:2;">
+        <li>Feedback methods used (for S1 and S2)</li>
+        <li>Key findings with quotes and data</li>
+        <li>Changes made in response (before/after of specific refinements)</li>
+        <li>Peer review insights and how they shaped the A3 &rarr; A4 iteration</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ========== SECTION 7: REFLECTION ========== -->
+<section class="section-pad" id="reflection">
+  <div class="wrap">
+    <p class="label reveal">07 &mdash; Reflection</p>
+    <h2 class="reveal">What I learned</h2>
+
+    <div class="reflection-grid" style="margin-top:2rem;">
+      <div class="card reveal">
+        <div class="reflection-num">01</div>
+        <h3>Stakeholder Feedback Process</h3>
+        <p class="card__desc">Describe your methods and how specific feedback shaped the final prototype. Include quotes and data.</p>
+      </div>
+      <div class="card reveal">
+        <div class="reflection-num">02</div>
+        <h3>How Peer Review Shaped My Redesign</h3>
+        <p class="card__desc">Reflect on how seeing peers' work and hearing their feedback shaped your redesign from A3 to A4.</p>
+      </div>
+      <div class="card reveal">
+        <div class="reflection-num">03</div>
+        <h3>My 'Aha' Moment</h3>
+        <p class="card__desc">What was your most meaningful insight while working through the VSD process?</p>
+      </div>
+      <div class="card reveal">
+        <div class="reflection-num">04</div>
+        <h3>If I Started Over</h3>
+        <p class="card__desc">Knowing what you know now, what different design directions would you take and why?</p>
+      </div>
+      <div class="card reveal">
+        <div class="reflection-num">05</div>
+        <h3>One Thing I'll Take Forward</h3>
+        <p class="card__desc">Describe one learning from this course you plan to use in the future.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ========== REFERENCES ========== -->
+<section class="section-pad">
+  <div class="wrap">
+    <p class="label reveal">References</p>
+    <ul class="ref-list reveal">
+      <li>Amir, M. (2024). <em>Kids in the kitchen: Parent reports of children's experiences and injury risk in the kitchen</em> (Master's thesis, University of Guelph). The Atrium. <a href="https://hdl.handle.net/10214/28587" target="_blank" rel="noopener">hdl.handle.net/10214/28587</a></li>
+      <li>Friedman, B., &amp; Hendry, D. G. (2019). <em>Value sensitive design: Shaping technology with moral imagination</em>. MIT Press. <a href="https://doi.org/10.7551/mitpress/7585.001.0001" target="_blank" rel="noopener">doi.org/10.7551/mitpress/7585.001.0001</a></li>
+      <li>Schultz-Bergin, M. (2021). "Designing for Values" in <em>The Primacy of the Public: Ethical Design for Technology</em>. MSL Academic Endeavors eBooks.</li>
+      <li>Van de Poel, I. (2013). "Translating Values into Design Requirements." In Michelfelder, D., McCarthy, N., &amp; Goldberg, D. (Eds.), <em>Philosophy and Engineering: Reflections on Practice, Principles and Process</em>. Springer.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="wrap">
+    <span>Charlie Cilla &mdash; GBDA 306, 2026</span>
+    <a href="https://doost44.github.io/3D-Cheese-Grater/" target="_blank" rel="noopener">3D Prototype on GitHub &nearr;</a>
+  </div>
+</footer>
+
+<!-- ========== JS ========== -->
+<script>
+  // Mobile nav toggle
+  document.querySelector('.nav-toggle').addEventListener('click', function () {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  // Close nav on link click (mobile)
+  document.querySelectorAll('.nav-links a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+
+  // Scroll reveal via IntersectionObserver
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(function (el) { observer.observe(el); });
+</script>
+
 </body>
 </html>
