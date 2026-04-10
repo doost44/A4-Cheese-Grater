@@ -6,206 +6,367 @@
   <title>GrateTogether — A Value Sensitive Redesign</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0e0e0e;
-      --bg-card: #161616;
-      --bg-card-hover: #1c1c1c;
-      --text: #e8e4df;
-      --text-muted: #a09a92;
-      --green: #4caf7c;
-      --green-dim: rgba(76,175,124,0.12);
-      --red: #e8734a;
-      --red-dim: rgba(232,115,74,0.12);
-      --accent-line: #2a2a2a;
-      --serif: 'DM Serif Display', serif;
+      --bg: #ffffff;
+      --bg-card: #f5f5f5;
+      --bg-card-hover: #ebebeb;
+      --text: #0a0a0a;
+      --text-muted: #6b6b6b;
+      --text-light: #999999;
+      --accent-green: #22c55e;
+      --accent-pro: #ef4444;
+      --accent-blue: #3b82f6;
+      --green-dim: rgba(34,197,94,0.08);
+      --red-dim: rgba(239,68,68,0.08);
+      --blue-dim: rgba(59,130,246,0.08);
+      --border: #e5e5e5;
+      --border-hover: #d4d4d4;
+      --serif: 'Instrument Serif', serif;
       --sans: 'DM Sans', sans-serif;
-      --max-w: 1120px;
-      --section-py: clamp(4rem, 8vw, 7rem);
+      --mono: 'IBM Plex Mono', monospace;
+      --sidebar-w: 220px;
+      --section-py: clamp(80px, 10vw, 140px);
     }
 
+    ::selection { background: var(--accent-green); color: #fff; }
     html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.7;
+      font-size: 1rem;
+      line-height: 160%;
       -webkit-font-smoothing: antialiased;
     }
 
-    img { max-width: 100%; display: block; }
-    a { color: var(--green); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { color: var(--text); text-decoration: none; transition: color 0.2s; }
 
-    /* ===== UTILITIES ===== */
-    .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
-    .section-pad { padding-top: var(--section-py); padding-bottom: var(--section-py); }
-    .label {
-      display: inline-block;
-      font-size: 0.75rem;
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+      background: var(--bg);
+    }
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+    .sidebar-logo .logo-mark {
+      width: 32px; height: 32px;
+      background: var(--accent-green);
+      border-radius: 4px;
+    }
+    .sidebar-logo span {
+      font-family: var(--sans);
       font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text);
     }
-    .label--green { color: var(--green); }
-    .label--red { color: var(--red); }
-    h2 {
-      font-family: var(--serif);
-      font-size: clamp(1.75rem, 4vw, 2.75rem);
-      line-height: 1.2;
-      margin-bottom: 1.25rem;
+    .sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: background 0.15s, color 0.15s;
     }
-    h3 {
-      font-family: var(--serif);
-      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
-      line-height: 1.3;
-      margin-bottom: 0.75rem;
-    }
-    .body-text { max-width: 680px; color: var(--text-muted); margin-bottom: 2.5rem; }
-    .divider { border: none; border-top: 1px solid var(--accent-line); margin: 0; }
-
-    /* ===== GRID ===== */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
-
-    /* ===== CARDS ===== */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--accent-line);
-      border-radius: 12px;
-      padding: 2rem;
-      transition: background 0.3s;
-    }
-    .card:hover { background: var(--bg-card-hover); }
-    .card--green-top { border-top: 3px solid var(--green); }
-    .card--red-top { border-top: 3px solid var(--red); }
-    .card__tag {
+    .sidebar-nav a:hover { background: var(--bg-card); }
+    .sidebar-nav a .chevron {
       font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
+      color: var(--text-light);
+      transition: transform 0.2s;
+    }
+    .sidebar-nav a:hover .chevron { transform: translateX(2px); }
+    .sidebar-nav a.active { background: var(--bg-card); color: var(--accent-green); }
+
+    .sidebar-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sidebar-cta {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.05rem;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
     }
-    .card__tag--green { color: var(--green); }
-    .card__tag--red { color: var(--red); }
-    .card__desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
-    .card__source { color: var(--text-muted); font-size: 0.82rem; font-style: italic; border-left: 2px solid var(--accent-line); padding-left: 0.75rem; margin-top: 1rem; }
-
-    /* ===== PILLS ===== */
-    .pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
-    .pill {
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.3rem 0.75rem;
-      border-radius: 999px;
-      letter-spacing: 0.04em;
+    .sidebar-cta .dot { width: 8px; height: 8px; background: var(--accent-green); border-radius: 2px; }
+    .sidebar-btn {
+      display: block;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: center;
+      color: var(--text);
+      transition: background 0.15s, border-color 0.15s;
     }
-    .pill--green { background: var(--green-dim); color: var(--green); }
-    .pill--red { background: var(--red-dim); color: var(--red); }
+    .sidebar-btn:hover { background: var(--bg-card); border-color: var(--border-hover); }
 
-    /* ===== NAV ===== */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(14,14,14,0.85);
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+    }
+    .main-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(24px, 4vw, 80px);
+    }
+
+    /* ===== MOBILE NAV ===== */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--accent-line);
+      border-bottom: 1px solid var(--border);
+      z-index: 200;
+      padding: 0 20px;
+      align-items: center;
+      justify-content: space-between;
     }
-    nav .wrap {
-      display: flex; align-items: center; justify-content: space-between;
-      height: 56px;
+    .mobile-nav .logo-mark {
+      width: 28px; height: 28px;
+      background: var(--accent-green);
+      border-radius: 4px;
     }
-    .nav-logo {
-      font-family: var(--serif);
-      font-size: 1.1rem;
+    .mobile-toggle {
+      background: none; border: none;
+      font-size: 1.4rem; cursor: pointer;
       color: var(--text);
-      white-space: nowrap;
     }
-    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-links a {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--text); }
-    .nav-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
 
-    @media (max-width: 720px) {
-      .nav-links {
-        display: none; flex-direction: column; gap: 0;
-        position: absolute; top: 56px; left: 0; right: 0;
-        background: rgba(14,14,14,0.97); border-bottom: 1px solid var(--accent-line);
-      }
-      .nav-links.open { display: flex; }
-      .nav-links a { padding: 0.85rem 1.5rem; display: block; }
-      .nav-toggle { display: block; }
+    /* ===== TYPOGRAPHY ===== */
+    .mono-label {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      line-height: 140%;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    h1 {
+      font-family: var(--sans);
+      font-size: clamp(3rem, 5.5vw, 5rem);
+      font-weight: 700;
+      line-height: 105%;
+      letter-spacing: -0.04em;
+      color: var(--text);
+    }
+
+    h2 {
+      font-family: var(--sans);
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      line-height: 115%;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-family: var(--sans);
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+
+    .body-text {
+      max-width: 600px;
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 170%;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section { padding: var(--section-py) 0; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    .section-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+      align-items: start;
     }
 
     /* ===== HERO ===== */
     .hero {
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center;
-      padding-top: 56px;
+      padding-top: clamp(100px, 15vw, 200px);
+      padding-bottom: clamp(60px, 10vw, 120px);
     }
-    .hero__label {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.5rem;
+    .hero h1 { max-width: 900px; margin-bottom: 32px; }
+    .hero .body-text { max-width: 560px; margin-bottom: 48px; }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      max-width: 700px;
     }
-    .hero h1 {
-      font-family: var(--serif);
-      font-size: clamp(2rem, 5.5vw, 3.75rem);
-      line-height: 1.15;
-      max-width: 780px; margin: 0 auto 1.5rem;
+    .hero-meta dt {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-bottom: 4px;
     }
-    .hero h1 em { font-style: italic; color: var(--green); }
-    .hero h1 em.red { color: var(--red); }
-    .hero__sub {
-      max-width: 600px; margin: 0 auto 2.5rem;
-      color: var(--text-muted); font-size: 1.05rem; line-height: 1.7;
+    .hero-meta dd {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
     }
-    .meta-bar {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;
-      font-size: 0.78rem; color: var(--text-muted);
-    }
-    .meta-bar dt { font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text); font-size: 0.68rem; margin-bottom: 0.15rem; }
 
-    /* ===== STAT CALLOUTS ===== */
-    .stats { display: flex; gap: 1.5rem; margin: 2rem 0; flex-wrap: wrap; }
-    .stat {
-      flex: 1; min-width: 140px;
+    /* ===== LINE ART CARDS ===== */
+    .art-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
+    .art-card {
       background: var(--bg-card);
-      border: 1px solid var(--accent-line);
-      border-radius: 10px;
-      padding: 1.25rem;
-      text-align: center;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: background 0.2s;
+      position: relative;
     }
+    .art-card:hover { background: var(--bg-card-hover); }
+    .art-card-label {
+      padding: 16px 20px 0;
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+    .art-card canvas {
+      width: 100%;
+      aspect-ratio: 1 / 1.2;
+      display: block;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .card:hover { border-color: var(--border-hover); }
+    .card--green-top { border-top: 3px solid var(--accent-green); }
+    .card--red-top { border-top: 3px solid var(--accent-pro); }
+    .card__tag {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card__tag--green { color: var(--accent-green); }
+    .card__tag--red { color: var(--accent-pro); }
+    .card__desc { color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; margin-bottom: 12px; }
+    .card__source {
+      color: var(--text-light);
+      font-size: 0.8rem;
+      font-style: italic;
+      border-left: 2px solid var(--border);
+      padding-left: 12px;
+      margin-top: 12px;
+    }
+
+    /* Card group hover */
+    [data-card-group]:has(.card:hover) .card:not(:hover) { opacity: 0.55; }
+    [data-card-group] .card { transition: opacity 0.2s, border-color 0.2s; }
+
+    /* ===== PILLS ===== */
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .pill {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.04rem;
+      text-transform: uppercase;
+    }
+    .pill--green { background: var(--green-dim); color: var(--accent-green); }
+    .pill--red { background: var(--red-dim); color: var(--accent-pro); }
+
+    /* ===== GRID ===== */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    /* ===== STATS ===== */
+    .stats { display: flex; gap: 20px; margin: 24px 0; flex-wrap: wrap; }
+    .stat { flex: 1; min-width: 120px; text-align: center; }
     .stat__number {
-      font-family: var(--serif);
-      font-size: 2rem;
-      color: var(--green);
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      color: var(--accent-green);
       line-height: 1;
-      margin-bottom: 0.3rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
     }
-    .stat__label { font-size: 0.78rem; color: var(--text-muted); }
+    .stat__label {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
 
     /* ===== BLOCKQUOTE ===== */
     blockquote {
-      border-left: 3px solid var(--red);
-      padding: 1rem 1.25rem;
-      margin: 1.5rem 0;
-      font-size: 1.05rem;
+      border-left: 3px solid var(--accent-pro);
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 1rem;
       font-style: italic;
       color: var(--text);
       background: var(--red-dim);
@@ -213,533 +374,1402 @@
     }
     blockquote cite {
       display: block;
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 0.6875rem;
       font-style: normal;
-      color: var(--text-muted);
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: var(--text-light);
     }
 
     /* ===== TENSION CARDS ===== */
-    .tension-card { margin-bottom: 1.5rem; }
+    .tension-card { margin-bottom: 16px; }
     .tension-vs {
-      display: flex; align-items: center; gap: 0.75rem;
-      flex-wrap: wrap; margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap; margin-bottom: 12px;
     }
-    .tension-vs .pill { font-size: 0.8rem; }
-    .tension-vs__vs { font-weight: 700; font-size: 0.75rem; color: var(--text-muted); }
+    .tension-vs .pill { font-size: 0.8rem; padding: 6px 16px; border-radius: 8px; }
+    .tension-vs__vs {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 600;
+    }
     .tension-card__resolution {
-      margin-top: 1rem; padding-top: 1rem;
-      border-top: 1px solid var(--accent-line);
+      margin-top: 16px; padding-top: 16px;
+      border-top: 1px solid var(--border);
       font-size: 0.92rem; color: var(--text-muted);
     }
     .tension-card__resolution strong { color: var(--text); }
 
     /* ===== BEFORE / AFTER ===== */
     .ba {
-      display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem;
-      align-items: center; margin-bottom: 3rem;
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px;
+      align-items: stretch; margin-bottom: 40px;
     }
+    .ba__item.card { padding: 32px; }
+    .ba__item--before { opacity: 0.7; }
+    .ba__item--after { border-left: 3px solid var(--accent-green); }
     .ba__arrow {
-      font-size: 2rem; color: var(--green); line-height: 1;
+      font-size: 2rem; color: var(--accent-green);
+      display: flex; align-items: center;
     }
-    @media (max-width: 720px) {
-      .ba { grid-template-columns: 1fr; text-align: center; }
-      .ba__arrow { transform: rotate(90deg); justify-self: center; }
-    }
-    .ba__item h4 { font-family: var(--serif); margin-bottom: 0.5rem; }
-    .ba__item p { font-size: 0.9rem; color: var(--text-muted); }
+    .ba__item h4 { font-weight: 700; margin-bottom: 8px; }
+    .ba__item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
 
     /* ===== MODE CARDS ===== */
-    .mode-card--safe { background: rgba(76,175,124,0.06); border-color: rgba(76,175,124,0.2); }
-    .mode-card--pro  { background: rgba(232,115,74,0.06); border-color: rgba(232,115,74,0.2); }
+    .mode-card--safe { background: var(--green-dim); border-color: rgba(34,197,94,0.2); }
+    .mode-card--pro  { background: var(--red-dim); border-color: rgba(239,68,68,0.2); }
     .mode-card ul { list-style: none; padding: 0; }
     .mode-card li {
-      position: relative; padding-left: 1.25rem; font-size: 0.92rem;
-      color: var(--text-muted); margin-bottom: 0.4rem;
+      position: relative; padding-left: 18px; font-size: 0.9rem;
+      color: var(--text-muted); margin-bottom: 6px; line-height: 1.6;
     }
     .mode-card li::before {
-      content: ''; position: absolute; left: 0; top: 0.55rem;
+      content: ''; position: absolute; left: 0; top: 9px;
       width: 6px; height: 6px; border-radius: 50%;
     }
-    .mode-card--safe li::before { background: var(--green); }
-    .mode-card--pro li::before  { background: var(--red); }
+    .mode-card--safe li::before { background: var(--accent-green); }
+    .mode-card--pro li::before  { background: var(--accent-pro); }
 
-    /* ===== PROTOTYPE EMBED ===== */
+    /* ===== PROTOTYPE ===== */
     .proto-wrap {
-      border: 1px solid var(--accent-line);
+      border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
-      background: var(--bg-card);
     }
     .proto-bar {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 0.65rem 1.25rem;
-      border-bottom: 1px solid var(--accent-line);
-      font-size: 0.8rem;
+      padding: 12px 20px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
     }
-    .proto-bar span { font-weight: 700; color: var(--text); }
-    .proto-bar a { font-size: 0.78rem; }
-    .proto-wrap iframe { width: 100%; height: 600px; border: none; display: block; }
-    @media (max-width: 720px) { .proto-wrap iframe { height: 400px; } }
+    .proto-bar span {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .proto-bar a {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      font-weight: 500;
+    }
+    .proto-bar a .arrow {
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+    .proto-bar a:hover .arrow { transform: translateX(4px); }
+    .proto-wrap iframe {
+      width: 100%; height: clamp(450px, 45vw, 650px);
+      border: none; display: block;
+    }
 
     /* ===== PLACEHOLDER ===== */
     .placeholder {
-      border: 2px dashed var(--accent-line);
+      border: 1px dashed var(--border);
       border-radius: 12px;
-      padding: 3rem 2rem;
+      padding: 60px 32px;
       text-align: center;
-      background: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 10px,
-        rgba(42,42,42,0.3) 10px,
-        rgba(42,42,42,0.3) 20px
-      );
     }
-    .placeholder h4 { font-family: var(--serif); margin-bottom: 0.75rem; }
-    .placeholder p { color: var(--text-muted); font-size: 0.9rem; max-width: 550px; margin: 0 auto; }
+    .placeholder h4 {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+    .placeholder p { color: var(--text-light); font-size: 0.9rem; max-width: 500px; margin: 0 auto; }
 
-    /* ===== REFLECTION CARDS ===== */
-    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    /* ===== REFLECTION ===== */
+    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .reflection-grid .card:last-child:nth-child(odd) { grid-column: 1 / -1; }
-    @media (max-width: 720px) { .reflection-grid { grid-template-columns: 1fr; } }
     .reflection-num {
-      font-family: var(--serif);
-      font-size: 1.75rem;
-      color: var(--accent-line);
-      margin-bottom: 0.5rem;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--border-hover);
+      margin-bottom: 8px;
     }
 
     /* ===== REFERENCES ===== */
     .ref-list { list-style: none; padding: 0; }
     .ref-list li {
       font-size: 0.85rem; color: var(--text-muted);
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--accent-line);
-      line-height: 1.6;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.65;
     }
-
-    /* ===== FOOTER ===== */
-    footer {
-      border-top: 1px solid var(--accent-line);
-      padding: 2rem 0;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-
-    /* ===== SCROLL REVEAL ===== */
-    .reveal {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* stagger children */
-    .stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
-    .stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
-    .stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
-    .stagger > .reveal:nth-child(5) { transition-delay: 0.4s; }
+    .ref-list a { color: var(--accent-green); }
+    .ref-list a:hover { text-decoration: underline; }
 
     /* ===== SPEC DETAILS ===== */
     details {
-      margin-top: 2rem;
-      border: 1px solid var(--accent-line);
-      border-radius: 10px;
+      margin-top: 24px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       overflow: hidden;
     }
     summary {
-      padding: 1rem 1.25rem;
+      padding: 14px 20px;
       cursor: pointer;
-      font-weight: 700;
-      font-size: 0.88rem;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
       color: var(--text);
       background: var(--bg-card);
       list-style: none;
     }
     summary::-webkit-details-marker { display: none; }
-    summary::before { content: '+ '; color: var(--green); }
+    summary::before { content: '+ '; color: var(--accent-green); }
     details[open] summary::before { content: '- '; }
     .spec-inner {
-      padding: 1.25rem;
+      padding: 20px;
       font-size: 0.88rem;
       color: var(--text-muted);
       line-height: 1.8;
-      background: var(--bg);
     }
     .spec-inner strong { color: var(--text); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: clamp(60px, 8vw, 100px) 0 32px;
+    }
+    footer .footer-inner {
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    }
+    footer span, footer a {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+    footer a { color: var(--accent-green); }
+
+    /* ===== DIVIDER ===== */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ===== FEEDBACK SECTION ===== */
+    .feedback-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .feedback-col { padding: 28px; }
+    .feedback-col + .feedback-col { border-left: 1px solid var(--border); }
+    .feedback-col h4 {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .feedback-col h4.fc-green { color: var(--accent-green); }
+    .feedback-col h4.fc-red { color: var(--accent-pro); }
+    .feedback-col ul { list-style: none; padding: 0; margin: 0; }
+    .feedback-col ul li {
+      position: relative;
+      padding-left: 16px;
+      margin-bottom: 12px;
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+    .feedback-col ul li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 9px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border-hover);
+    }
+    .refinement-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+    .refinement-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      padding-top: 3px;
+      white-space: nowrap;
+    }
+    .refinement-response { color: var(--text-muted); }
+    .pull-quote {
+      font-family: var(--serif);
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      line-height: 1.55;
+      color: var(--text);
+      font-style: italic;
+      margin: 32px 0;
+      padding: 32px;
+      border-left: 4px solid var(--accent-green);
+      background: var(--green-dim);
+      border-radius: 0 12px 12px 0;
+    }
+    .pull-quote cite {
+      display: block;
+      margin-top: 16px;
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      font-style: normal;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+    .insight-card {
+      border-left: 4px solid transparent;
+      border-image: linear-gradient(to bottom, var(--accent-green), var(--accent-pro)) 1;
+      background: var(--bg-card);
+      border-radius: 0 12px 12px 0;
+      padding: 28px;
+      margin-top: 24px;
+    }
+    .insight-card__tag {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.08rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-pro));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .child-card { background: #fdfaf6; border-color: #f0e8da; }
+    @media (max-width: 768px) {
+      .feedback-cols { grid-template-columns: 1fr; }
+      .feedback-col + .feedback-col { border-left: none; border-top: 1px solid var(--border); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .main { margin-left: 0; padding-top: 60px; }
+      .art-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .section-header { grid-template-columns: 1fr; gap: 16px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .ba { grid-template-columns: 1fr; }
+      .ba__arrow { justify-self: center; transform: rotate(90deg); }
+      .hero-meta { grid-template-columns: 1fr 1fr; }
+      .reflection-grid { grid-template-columns: 1fr; }
+      .art-grid { grid-template-columns: 1fr; max-width: 400px; }
+    }
   </style>
 </head>
 <body>
 
-<!-- ========== NAV ========== -->
-<nav>
-  <div class="wrap">
-    <span class="nav-logo">GrateTogether</span>
-    <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#overview">Overview</a></li>
-      <li><a href="#research">Research</a></li>
-      <li><a href="#tensions">Tensions</a></li>
-      <li><a href="#design">Design</a></li>
-      <li><a href="#prototype">Prototype</a></li>
-      <li><a href="#feedback">Feedback</a></li>
-      <li><a href="#reflection">Reflection</a></li>
-    </ul>
+<!-- ========== SIDEBAR ========== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark"></div>
+    <span>GrateTogether</span>
   </div>
-</nav>
-
-<!-- ========== HERO ========== -->
-<section class="hero" id="overview">
-  <div class="wrap stagger">
-    <p class="hero__label reveal">GBDA 306 &mdash; Value Sensitive Design Case Study</p>
-    <h1 class="reveal">Redesigning the cheese grater for <em>safety</em> and <em class="red">mastery</em></h1>
-    <p class="hero__sub reveal">A semester-long exploration of how Value Sensitive Design can transform an everyday kitchen tool into one that serves both children learning to cook and enthusiasts chasing flavour perfection.</p>
-    <dl class="meta-bar reveal">
-      <div><dt>Designer</dt><dd>Charlie Cilla</dd></div>
-      <div><dt>Timeline</dt><dd>Jan &ndash; Apr 2026</dd></div>
-      <div><dt>Product</dt><dd>GrateTogether Workstation</dd></div>
-      <div><dt>Framework</dt><dd>Value Sensitive Design</dd></div>
-    </dl>
+  <nav class="sidebar-nav" id="sidebarNav">
+    <a href="#overview" class="active">Overview <span class="chevron">&#8250;</span></a>
+    <a href="#problem">The Problem <span class="chevron">&#8250;</span></a>
+    <a href="#research">Research <span class="chevron">&#8250;</span></a>
+    <a href="#tensions">Tensions <span class="chevron">&#8250;</span></a>
+    <a href="#design">Design <span class="chevron">&#8250;</span></a>
+    <a href="#prototype">Prototype <span class="chevron">&#8250;</span></a>
+    <a href="#feedback">Feedback <span class="chevron">&#8250;</span></a>
+    <a href="#reflection">Reflection <span class="chevron">&#8250;</span></a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-cta">
+      <span class="dot"></span> Explore
+    </div>
+    <a href="https://doost44.github.io/3D-Cheese-Grater/" target="_blank" rel="noopener" class="sidebar-btn">3D Prototype</a>
+    <a href="#prototype" class="sidebar-btn">View Demo</a>
   </div>
-</section>
+</aside>
 
-<hr class="divider" />
+<!-- ========== MOBILE NAV ========== -->
+<div class="mobile-nav">
+  <div class="logo-mark"></div>
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">&#9776;</button>
+</div>
 
-<!-- ========== SECTION 1: THE PROBLEM ========== -->
-<section class="section-pad" id="problem">
-  <div class="wrap">
-    <p class="label reveal">01 &mdash; The Problem</p>
-    <h2 class="reveal">One tool, two very different users</h2>
-    <p class="body-text reveal">The standard box grater hasn't changed in decades. It works for adults but exposes blades at all times, provides no guidance, and prevents independent use by children. For enthusiasts, it offers limited texture control and no path to mastery. <strong>Core tension:</strong> the sharper a grater is, the better it performs&nbsp;&mdash; and the more dangerous it becomes.</p>
+<!-- ========== MAIN ========== -->
+<div class="main">
+  <div class="main-inner">
 
-    <div class="grid-2">
-      <!-- S1 card -->
-      <div class="card card--green-top reveal">
-        <p class="card__tag card__tag--green">Stakeholder 1</p>
-        <h3>Children Cooking at Home</h3>
-        <p class="card__desc">Kids aged 8&ndash;12 who want to participate in meal preparation. They already use graters in real kitchens&nbsp;&mdash; the design has to work with that reality.</p>
-        <div class="pills">
-          <span class="pill pill--green">Safety</span>
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="overview" data-reveal-group>
+      <p class="mono-label" data-reveal style="margin-bottom:20px;">GBDA 306 — Value Sensitive Design</p>
+      <h1 data-reveal>A dual-mode cheese grater, designed for safety and mastery</h1>
+      <p class="body-text" data-reveal style="margin-top:24px;">A semester-long exploration of how Value Sensitive Design can transform an everyday kitchen tool into one that serves both children learning to cook and enthusiasts chasing flavour perfection.</p>
+
+      <dl class="hero-meta" data-reveal>
+        <div><dt>Designer</dt><dd>Charlie Cilla</dd></div>
+        <div><dt>Timeline</dt><dd>Jan – Apr 2026</dd></div>
+        <div><dt>Product</dt><dd>GrateTogether</dd></div>
+        <div><dt>Framework</dt><dd>VSD</dd></div>
+      </dl>
+
+      <!-- Interactive line art cards -->
+      <div class="art-grid" data-reveal>
+        <div class="art-card" data-art="safe">
+          <div class="art-card-label">Safe Mode</div>
+          <canvas></canvas>
+        </div>
+        <div class="art-card" data-art="pro">
+          <div class="art-card-label">Pro Mode</div>
+          <canvas></canvas>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 1: THE PROBLEM ===== -->
+    <section class="section" id="problem" data-reveal-group>
+      <p class="section-label" data-reveal>01 — The Problem</p>
+      <div class="section-header">
+        <div><h2 data-reveal>One tool, two very different users</h2></div>
+        <div><p class="body-text" data-reveal>The standard box grater hasn't changed in decades. It works for adults but exposes blades at all times, provides no guidance, and prevents independent use by children. For enthusiasts, it offers limited texture control and no path to mastery. <strong>Core tension:</strong> the sharper a grater is, the better it performs — and the more dangerous it becomes.</p></div>
+      </div>
+      <div class="grid-2" data-card-group>
+        <div class="card card--green-top" data-reveal>
+          <p class="card__tag card__tag--green">Stakeholder 1</p>
+          <h3>Children Cooking at Home</h3>
+          <p class="card__desc">Kids aged 8–12 who want to participate in meal preparation. They already use graters in real kitchens — the design has to work with that reality.</p>
+          <div class="pills">
+            <span class="pill pill--green">Safety</span>
+            <span class="pill pill--green">Independence</span>
+            <span class="pill pill--green">Self-Development</span>
+          </div>
+          <p class="card__source">"Kids can feel proud being part of the cooking process, but they're also the most likely to cut themselves or mishandle a grater." — A1</p>
+        </div>
+        <div class="card card--red-top" data-reveal>
+          <p class="card__tag card__tag--red">Stakeholder 2</p>
+          <h3>Cheese &amp; Cooking Enthusiasts</h3>
+          <p class="card__desc">Home cooks who care deeply about flavour, texture, and technique. Grating is part of the sensory pleasure of cooking, not just a chore.</p>
+          <div class="pills">
+            <span class="pill pill--red">Mastery</span>
+            <span class="pill pill--red">Hedonism</span>
+            <span class="pill pill--red">Happiness</span>
+          </div>
+          <p class="card__source">"They chase pleasure in flavour and texture, and they want mastery, because cooking is a skill they're trying to get better at." — A1</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 2: RESEARCH ===== -->
+    <section class="section" id="research" data-reveal-group>
+      <p class="section-label" data-reveal>02 — Research &amp; Validation</p>
+      <div class="section-header">
+        <div><h2 data-reveal>Grounding values in evidence</h2></div>
+        <div><p class="body-text" data-reveal>Values were validated through secondary research (S1) and a semi-structured interview (S2). Both shifted the designer's assumptions.</p></div>
+      </div>
+      <div class="grid-2" data-card-group>
+        <div class="card card--green-top" data-reveal>
+          <p class="card__tag card__tag--green">S1 — Children — Injury Data</p>
+          <h3>The grater is not the safer option</h3>
+          <p class="card__desc">Parents rate permission for cheese graters and sharp knives at nearly identical levels — both with a mean of <strong>0.86</strong> (SD 0.36). The grater sits right beside a sharp knife in real household practice.</p>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat__number">0.17</div>
+              <div class="stat__label">Cut proportion</div>
+            </div>
+            <div class="stat">
+              <div class="stat__number">0.86</div>
+              <div class="stat__label">Permission mean</div>
+            </div>
+            <div class="stat">
+              <div class="stat__number">0.67</div>
+              <div class="stat__label">Avg injuries</div>
+            </div>
+          </div>
+          <p class="card__desc" style="margin-top:12px;">These numbers stay the same for older children — the hazard does not fade with age.</p>
+          <p class="card__source">Source: Amir, M. (2024). Kids in the kitchen (Master's thesis, University of Guelph).</p>
+          <p class="card__desc" style="margin-top:12px; font-weight:600; color:var(--text);">Key insight: Kids already use graters. Safety can't mean preventing use — it means designing around real household behaviour.</p>
+        </div>
+        <div class="card card--red-top" data-reveal>
+          <p class="card__tag card__tag--red">S2 — Enthusiasts — Interview</p>
+          <h3>Mastery through control &amp; confidence</h3>
+          <p class="card__desc">Semi-structured interview with an avid home cook and cheese enthusiast. The participant described cheese in emotional and sensory terms, confirming hedonism and happiness as core values.</p>
+          <blockquote>
+            "I get a bit nervous when the piece I'm grating gets small, and my fingers get close to the blade. But it doesn't stop me. I feel pretty brave when I grate something that close."
+            <cite>— K, Interview Participant</cite>
+          </blockquote>
+          <p class="card__desc" style="margin-top:12px; font-weight:600; color:var(--text);">Key insight: Mastery is expressed through control and confidence — accepting a bit of risk because it's part of doing something enjoyable.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 3: TENSIONS ===== -->
+    <section class="section" id="tensions" data-reveal-group>
+      <p class="section-label" data-reveal>03 — Value Tensions</p>
+      <div class="section-header">
+        <div><h2 data-reveal>Tensions aren't flaws — they're the problem worth solving</h2></div>
+        <div><p class="body-text" data-reveal>VSD teaches that value conflicts are not evidence of a flawed design. They're what make the problem meaningful. The challenge is negotiating them thoughtfully. <span style="color:var(--text-light); font-size:0.85rem;">(Friedman &amp; Hendry, 2019; Van de Poel, 2013)</span></p></div>
+      </div>
+      <div class="card tension-card" data-reveal>
+        <h3>Safety vs. Mastery</h3>
+        <div class="tension-vs">
+          <span class="pill pill--green">S1 Safety</span>
+          <span class="tension-vs__vs">VS</span>
+          <span class="pill pill--red">S2 Mastery</span>
+        </div>
+        <p class="card__desc">Sharper blades and greater control improve the enthusiast's experience, but the same qualities make the tool dangerous for children. This can't be solved in a single universal configuration.</p>
+        <div class="tension-card__resolution">
+          <strong>Resolution:</strong> A dual-mode design — two legitimate states of the same object. Safe Mode prioritizes protection; Pro Mode prioritizes performance. The tension becomes visible and intentional rather than hidden.
+        </div>
+      </div>
+      <div class="card tension-card" data-reveal>
+        <h3>Independence vs. Safety</h3>
+        <div class="tension-vs">
           <span class="pill pill--green">Independence</span>
-          <span class="pill pill--green">Self-Development</span>
+          <span class="tension-vs__vs">VS</span>
+          <span class="pill pill--green">Safety</span>
         </div>
-        <p class="card__source">"Kids can feel proud being part of the cooking process, but they're also the most likely to cut themselves or mishandle a grater." &mdash; A1</p>
-      </div>
-      <!-- S2 card -->
-      <div class="card card--red-top reveal">
-        <p class="card__tag card__tag--red">Stakeholder 2</p>
-        <h3>Cheese &amp; Cooking Enthusiasts</h3>
-        <p class="card__desc">Home cooks who care deeply about flavour, texture, and technique. Grating is part of the sensory pleasure of cooking, not just a chore.</p>
-        <div class="pills">
-          <span class="pill pill--red">Mastery</span>
-          <span class="pill pill--red">Hedonism</span>
-          <span class="pill pill--red">Happiness</span>
+        <p class="card__desc">Children want to participate and feel capable, but more freedom naturally introduces more risk. This is an internal tension within Stakeholder 1.</p>
+        <div class="tension-card__resolution">
+          <strong>Resolution:</strong> Guided independence — the child acts, but the object sets guardrails. Enclosed feed paths, structured pushers, and visual cues let kids build skills without losing safety.
         </div>
-        <p class="card__source">"They chase pleasure in flavour and texture, and they want mastery, because cooking is a skill they're trying to get better at." &mdash; A1</p>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<hr class="divider" />
+    <div class="section-divider"></div>
 
-<!-- ========== SECTION 2: RESEARCH ========== -->
-<section class="section-pad" id="research">
-  <div class="wrap">
-    <p class="label reveal">02 &mdash; Research &amp; Validation</p>
-    <h2 class="reveal">Grounding values in evidence</h2>
-    <p class="body-text reveal">Values were validated through secondary research (S1) and a semi-structured interview (S2). Both shifted the designer's assumptions.</p>
+    <!-- ===== SECTION 4: DESIGN EVOLUTION ===== -->
+    <section class="section" id="design" data-reveal-group>
+      <p class="section-label" data-reveal>04 — Design Evolution</p>
+      <div class="section-header">
+        <div><h2 data-reveal>From box grater to dual-mode workstation</h2></div>
+        <div><p class="body-text" data-reveal>The biggest shift was moving from a handheld grater to a countertop workstation with two distinct modes. Instead of burying values in a manual, the object communicates them directly through its form and constraints.</p></div>
+      </div>
+      <div class="ba" data-reveal>
+        <div class="ba__item ba__item--before card">
+          <h4>Before — Standard Box Grater</h4>
+          <p>Blades exposed at all times. No guidance or structure. Prevents independent use by children. Limited texture control. Values invisible in form.</p>
+        </div>
+        <div class="ba__arrow">&rarr;</div>
+        <div class="ba__item ba__item--after card">
+          <h4>After — GrateTogether</h4>
+          <p>Dual-mode countertop workstation. Values embodied in physical form. Mode switching makes the value trade-off visible and intentional.</p>
+        </div>
+      </div>
+      <div class="grid-2" data-card-group>
+        <div class="card mode-card mode-card--safe" data-reveal>
+          <p class="card__tag card__tag--green">Safe Mode — Children (8–12)</p>
+          <h3>Guided &amp; Protected</h3>
+          <ul>
+            <li>Enclosed grating channel with shutter</li>
+            <li>Captive fingertip-safe pusher</li>
+            <li>End-stop preserves safe leftover stub</li>
+            <li>Bin-present interlock for operation</li>
+            <li>Green pictogram cues (load &rarr; push &rarr; collect)</li>
+            <li>Stable non-slip base</li>
+          </ul>
+        </div>
+        <div class="card mode-card mode-card--pro" data-reveal>
+          <p class="card__tag card__tag--red">Pro Mode — Enthusiasts</p>
+          <h3>Open &amp; Precise</h3>
+          <ul>
+            <li>Fully exposed grating surface</li>
+            <li>Direct tactile control over angle &amp; pressure</li>
+            <li>Swappable precision blade cartridges</li>
+            <li>Fine / coarse texture control</li>
+            <li>Brushed stainless &amp; premium feel</li>
+            <li>Ergonomic 15&deg; handle angle</li>
+          </ul>
+        </div>
+      </div>
+      <details data-reveal>
+        <summary>Design Specification Details</summary>
+        <div class="spec-inner">
+          <strong>Product:</strong> GrateTogether — Dual-mode countertop cheese grater workstation<br>
+          <strong>Form:</strong> Upright trapezoid, wider base narrower top, soft radii. Height &asymp; 2.2&times; body width.<br>
+          <strong>Funnel:</strong> Rounded cylindrical/flared, centered, 45–50% of base width.<br>
+          <strong>Handles:</strong> One per side, integrated ergonomic loop, dark charcoal slightly rubberized. Span 55–65% of body height.<br>
+          <strong>Materials:</strong> Matte dark gray/charcoal body, muted green safe cues, brushed stainless grating plate, clear collection bin.<br>
+          <strong>Mode Switch:</strong> Upper front control area, labeled SAFE (green) / PRO (red-dark), mechanically linked to shutter + pusher + bin latch.<br>
+          <strong>Safe Mode:</strong> Shutter closed/latched, pusher captive along guided channel, bin must be inserted to operate. Pro exposure mechanically blocked.<br>
+          <strong>Pro Mode:</strong> Shutter retracts, plate fully exposed, pusher parks or removed. Bin optional.
+        </div>
+      </details>
+    </section>
 
-    <div class="grid-2">
-      <!-- S1 evidence -->
-      <div class="card card--green-top reveal">
-        <p class="card__tag card__tag--green">S1 &mdash; Children &mdash; Injury Data</p>
-        <h3>The grater is not the safer option</h3>
-        <p class="card__desc">Parents rate permission for cheese graters and sharp knives at nearly identical levels&nbsp;&mdash; both with a mean of <strong>0.86</strong> (SD&nbsp;0.36). The grater sits right beside a sharp knife in real household practice.</p>
+    <div class="section-divider"></div>
 
-        <div class="stats">
-          <div class="stat">
-            <div class="stat__number">0.17</div>
-            <div class="stat__label">Cut proportion (grater, all ages)</div>
+    <!-- ===== SECTION 5: PROTOTYPE ===== -->
+    <section class="section" id="prototype" data-reveal-group>
+      <p class="section-label" data-reveal>05 — Interactive Prototype</p>
+      <h2 data-reveal>Explore the 3D model</h2>
+      <p class="body-text" data-reveal style="margin-bottom:32px;">The interactive prototype allows switching between Safe Mode and Pro Mode, with activation animations showing cheese interaction. Built with Three.js and React Three Fiber.</p>
+      <div class="proto-wrap" data-reveal>
+        <div class="proto-bar">
+          <span>GrateTogether — 3D Prototype</span>
+          <a href="https://doost44.github.io/3D-Cheese-Grater/" target="_blank" rel="noopener">Open Full Screen <span class="arrow">&nearr;</span></a>
+        </div>
+        <iframe
+          src="https://doost44.github.io/3D-Cheese-Grater/"
+          loading="lazy"
+          title="GrateTogether Interactive 3D Prototype"
+          allow="accelerometer; gyroscope"
+        ></iframe>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 6: FEEDBACK ===== -->
+    <section class="section" id="feedback" data-reveal-group>
+      <p class="section-label" data-reveal>06 — Stakeholder Feedback &amp; Refinement</p>
+      <div class="section-header">
+        <div><h2 data-reveal>Testing with real people</h2></div>
+        <div><p class="body-text" data-reveal>The prototype was shown to two stakeholders representing each user group. Their feedback shaped specific design refinements and validated core value propositions.</p></div>
+      </div>
+
+      <!-- Stakeholder 01 — Cheese Enthusiast -->
+      <div class="card card--red-top" data-reveal style="margin-bottom: 32px;">
+        <p class="card__tag card__tag--red">Stakeholder 01 &middot; Cheese Enthusiast</p>
+        <h3 style="margin-bottom: 20px;">Expert user feedback &mdash; structured interview</h3>
+
+        <div class="feedback-cols">
+          <div class="feedback-col">
+            <h4 class="fc-green">What worked</h4>
+            <ul>
+              <li>Exploded view of components is effective for communicating product architecture</li>
+              <li>All components clearly labelled and easy to identify at a glance</li>
+              <li>Interface reads as very clean and considered</li>
+              <li>Safe Mode &rarr; Pro Mode switching with the green-to-red visual transition feels authentic and communicates risk calibration intuitively</li>
+              <li>Top-right legend/label box adds context and is genuinely informative</li>
+            </ul>
           </div>
-          <div class="stat">
-            <div class="stat__number">0.86</div>
-            <div class="stat__label">Permission mean (grater = knife)</div>
-          </div>
-          <div class="stat">
-            <div class="stat__number">0.67</div>
-            <div class="stat__label">Avg injuries (per child)</div>
+          <div class="feedback-col">
+            <h4 class="fc-red">Areas for refinement</h4>
+            <ul>
+              <li>User journey and primary call-to-action unclear &mdash; stakeholder was unsure what action the website was asking them to take</li>
+              <li>No ability to drag and configure different grater types onto the frame &mdash; desired more modularity and product customisation in the UI</li>
+              <li>Instructional copy at top of page visually collides with component labels, creating readability conflict</li>
+            </ul>
           </div>
         </div>
 
-        <p class="card__desc" style="margin-top:1rem;">These numbers stay the same for older children&nbsp;&mdash; the hazard does not fade with age.</p>
-        <p class="card__source">Source: Amir, M. (2024). <em>Kids in the kitchen</em> (Master's thesis, University of Guelph).</p>
-        <p class="card__desc" style="margin-top:1rem; font-weight:500; color:var(--text);">Key insight: Kids already use graters. Safety can't mean preventing use&nbsp;&mdash; it means designing around real household behaviour.</p>
+        <div style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 8px;">
+          <p class="card__tag" style="color: var(--text); margin-bottom: 14px;">Refinements Made</p>
+          <div class="refinement-row">
+            <span class="refinement-label">CTA clarity</span>
+            <span class="refinement-response">Added primary action hierarchy and clearer user flow signposting</span>
+          </div>
+          <div class="refinement-row">
+            <span class="refinement-label">Drag interaction</span>
+            <span class="refinement-response">Flagged for V2 interactive configurator feature</span>
+          </div>
+          <div class="refinement-row">
+            <span class="refinement-label">Label overlap</span>
+            <span class="refinement-response">Adjusted z-index layering and type positioning to resolve collision</span>
+          </div>
+        </div>
       </div>
 
-      <!-- S2 evidence -->
-      <div class="card card--red-top reveal">
-        <p class="card__tag card__tag--red">S2 &mdash; Enthusiasts &mdash; Interview</p>
-        <h3>Mastery through control &amp; confidence</h3>
-        <p class="card__desc">Semi-structured interview with an avid home cook and cheese enthusiast. The participant described cheese in emotional and sensory terms, confirming hedonism and happiness as core values.</p>
+      <!-- Stakeholder 02 — Child User -->
+      <div class="card child-card" data-reveal style="border-top: 3px solid var(--accent-green);">
+        <p class="card__tag card__tag--green">Stakeholder 02 &middot; Child User &middot; Age 7&ndash;10 &middot; Stand-in Interview</p>
+        <p class="card__desc" style="margin-bottom: 4px;">Direct child research used a representative respondent per ethical research practice.</p>
 
-        <blockquote>
-          "I get a bit nervous when the piece I'm grating gets small, and my fingers get close to the blade. But it doesn't stop me. I feel pretty brave when I grate something that close."
-          <cite>&mdash; K, Interview Participant</cite>
-        </blockquote>
+        <div class="pull-quote">
+          &ldquo;I love the GrateTogether because I love helping my parents make dinner and my mum never lets me grate cheese because she thinks I will hurt myself. Now when we make my favourite dinner I get to help by grating the parmesan for spaghetti. My mum feels better about our new grater because she knows I will not accidentally hurt myself because of the Safe Mode. I love how easy it is too. I can grate a whole block of cheese super super fast.&rdquo;
+          <cite>&mdash; Stand-in respondent, age 9</cite>
+        </div>
 
-        <p class="card__desc" style="margin-top:1rem; font-weight:500; color:var(--text);">Key insight: Mastery is expressed through control and confidence&nbsp;&mdash; accepting a bit of risk because it's part of doing something enjoyable.</p>
+        <h3 style="margin-bottom: 12px;">Synthesis</h3>
+        <p class="card__desc">The feedback validates the core safety proposition of GrateTogether&rsquo;s Safe Mode. For this user group, the product removes a genuine point of household friction &mdash; children wanting to participate in food preparation while parents manage risk. The emotional outcome (inclusion, confidence, family collaboration) aligns directly with the product&rsquo;s intended value.</p>
+
+        <div class="insight-card" data-reveal>
+          <p class="insight-card__tag">Insight: Earned Autonomy</p>
+          <h3 style="margin-bottom: 12px;">The &ldquo;Pro Mode Aspiration&rdquo; tension</h3>
+          <p class="card__desc">The child expressed a desire to use Pro Mode but acknowledged her parents restrict access even to Safe Mode following a prior injury with a conventional grater. This reveals an important product narrative opportunity: Safe Mode is not just a safety feature &mdash; it is a trust-building gateway.</p>
+          <p class="card__desc">The progression from Safe &rarr; Pro Mode mirrors a real emotional journey of demonstrated responsibility and growing independence.</p>
+          <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 16px;">
+            <p class="card__tag" style="color: var(--text); margin-bottom: 8px;">Design Opportunity</p>
+            <p class="card__desc" style="margin-bottom: 0;">A future &ldquo;graduated access&rdquo; feature where Safe Mode usage builds toward unlocking Pro Mode &mdash; turning the grater into a tool that grows with the child.</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<hr class="divider" />
+    <div class="section-divider"></div>
 
-<!-- ========== SECTION 3: TENSIONS ========== -->
-<section class="section-pad" id="tensions">
-  <div class="wrap">
-    <p class="label reveal">03 &mdash; Value Tensions</p>
-    <h2 class="reveal">Tensions aren't flaws&nbsp;&mdash; they're the problem worth solving</h2>
-    <p class="body-text reveal">VSD teaches that value conflicts are not evidence of a flawed design. They're what make the problem meaningful. The challenge is negotiating them thoughtfully. <span style="color:var(--text-muted); font-size:0.88rem;">(Friedman &amp; Hendry, 2019; Van de Poel, 2013)</span></p>
-
-    <!-- Tension 1 -->
-    <div class="card tension-card reveal">
-      <h3>Safety vs. Mastery</h3>
-      <div class="tension-vs">
-        <span class="pill pill--green">S1 Safety</span>
-        <span class="tension-vs__vs">VS</span>
-        <span class="pill pill--red">S2 Mastery</span>
+    <!-- ===== SECTION 7: REFLECTION ===== -->
+    <section class="section" id="reflection" data-reveal-group>
+      <p class="section-label" data-reveal>07 — Reflection</p>
+      <h2 data-reveal>What I learned</h2>
+      <div class="reflection-grid" data-card-group style="margin-top:24px;">
+        <div class="card" data-reveal>
+          <div class="reflection-num">01</div>
+          <h3>Stakeholder Feedback Process</h3>
+          <p class="card__desc">Describe your methods and how specific feedback shaped the final prototype. Include quotes and data.</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="reflection-num">02</div>
+          <h3>How Peer Review Shaped My Redesign</h3>
+          <p class="card__desc">Reflect on how seeing peers' work and hearing their feedback shaped your redesign from A3 to A4.</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="reflection-num">03</div>
+          <h3>My 'Aha' Moment</h3>
+          <p class="card__desc">What was your most meaningful insight while working through the VSD process?</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="reflection-num">04</div>
+          <h3>If I Started Over</h3>
+          <p class="card__desc">Knowing what you know now, what different design directions would you take and why?</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="reflection-num">05</div>
+          <h3>One Thing I'll Take Forward</h3>
+          <p class="card__desc">Describe one learning from this course you plan to use in the future.</p>
+        </div>
       </div>
-      <p class="card__desc">Sharper blades and greater control improve the enthusiast's experience, but the same qualities make the tool dangerous for children. This can't be solved in a single universal configuration.</p>
-      <div class="tension-card__resolution">
-        <strong>Resolution:</strong> A dual-mode design&nbsp;&mdash; two legitimate states of the same object. Safe Mode prioritizes protection; Pro Mode prioritizes performance. The tension becomes visible and intentional rather than hidden.
-      </div>
-    </div>
+    </section>
 
-    <!-- Tension 2 -->
-    <div class="card tension-card reveal">
-      <h3>Independence vs. Safety</h3>
-      <div class="tension-vs">
-        <span class="pill pill--green">Independence</span>
-        <span class="tension-vs__vs">VS</span>
-        <span class="pill pill--green">Safety</span>
-      </div>
-      <p class="card__desc">Children want to participate and feel capable, but more freedom naturally introduces more risk. This is an internal tension within Stakeholder&nbsp;1.</p>
-      <div class="tension-card__resolution">
-        <strong>Resolution:</strong> Guided independence&nbsp;&mdash; the child acts, but the object sets guardrails. Enclosed feed paths, structured pushers, and visual cues let kids build skills without losing safety.
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="section-divider"></div>
 
-<hr class="divider" />
-
-<!-- ========== SECTION 4: DESIGN EVOLUTION ========== -->
-<section class="section-pad" id="design">
-  <div class="wrap">
-    <p class="label reveal">04 &mdash; Design Evolution</p>
-    <h2 class="reveal">From box grater to dual-mode workstation</h2>
-    <p class="body-text reveal">The biggest shift was moving from a handheld grater to a countertop workstation with two distinct modes. Instead of burying values in a manual, the object communicates them directly through its form and constraints.</p>
-
-    <!-- Before / After -->
-    <div class="ba reveal">
-      <div class="ba__item">
-        <h4>Before&nbsp;&mdash; Standard Box Grater</h4>
-        <p>Blades exposed at all times. No guidance or structure. Prevents independent use by children. Limited texture control. Values invisible in form.</p>
-      </div>
-      <div class="ba__arrow">&rarr;</div>
-      <div class="ba__item">
-        <h4>After&nbsp;&mdash; GrateTogether</h4>
-        <p>Dual-mode countertop workstation. Values embodied in physical form. Mode switching makes the value trade-off visible and intentional.</p>
-      </div>
-    </div>
-
-    <!-- Mode cards -->
-    <div class="grid-2">
-      <div class="card mode-card mode-card--safe reveal">
-        <p class="card__tag card__tag--green">Safe Mode &mdash; Children (8&ndash;12)</p>
-        <h3>Guided &amp; Protected</h3>
-        <ul>
-          <li>Enclosed grating channel with shutter</li>
-          <li>Captive fingertip-safe pusher</li>
-          <li>End-stop preserves safe leftover stub</li>
-          <li>Bin-present interlock for operation</li>
-          <li>Green pictogram cues (load &rarr; push &rarr; collect)</li>
-          <li>Stable non-slip base</li>
-        </ul>
-      </div>
-      <div class="card mode-card mode-card--pro reveal">
-        <p class="card__tag card__tag--red">Pro Mode &mdash; Enthusiasts</p>
-        <h3>Open &amp; Precise</h3>
-        <ul>
-          <li>Fully exposed grating surface</li>
-          <li>Direct tactile control over angle &amp; pressure</li>
-          <li>Swappable precision blade cartridges</li>
-          <li>Fine / coarse texture control</li>
-          <li>Brushed stainless &amp; premium feel</li>
-          <li>Ergonomic 15&deg; handle angle</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Expandable spec details -->
-    <details class="reveal">
-      <summary>Design Specification Details</summary>
-      <div class="spec-inner">
-        <strong>Product:</strong> GrateTogether&nbsp;&mdash; Dual-mode countertop cheese grater workstation<br>
-        <strong>Form:</strong> Upright trapezoid, wider base narrower top, soft radii. Height &asymp; 2.2&times; body width.<br>
-        <strong>Funnel:</strong> Rounded cylindrical/flared, centered, 45&ndash;50% of base width.<br>
-        <strong>Handles:</strong> One per side, integrated ergonomic loop, dark charcoal slightly rubberized. Span 55&ndash;65% of body height.<br>
-        <strong>Materials:</strong> Matte dark gray/charcoal body, muted green safe cues, brushed stainless grating plate, clear collection bin.<br>
-        <strong>Mode Switch:</strong> Upper front control area, labeled SAFE (green) / PRO (red-dark), mechanically linked to shutter + pusher + bin latch.<br>
-        <strong>Safe Mode:</strong> Shutter closed/latched, pusher captive along guided channel, bin must be inserted to operate. Pro exposure mechanically blocked.<br>
-        <strong>Pro Mode:</strong> Shutter retracts, plate fully exposed, pusher parks or removed. Bin optional.
-      </div>
-    </details>
-  </div>
-</section>
-
-<hr class="divider" />
-
-<!-- ========== SECTION 5: PROTOTYPE ========== -->
-<section class="section-pad" id="prototype">
-  <div class="wrap">
-    <p class="label reveal">05 &mdash; Interactive Prototype</p>
-    <h2 class="reveal">Explore the 3D model</h2>
-    <p class="body-text reveal">The interactive prototype allows switching between Safe Mode and Pro Mode, with activation animations showing cheese interaction. Built with Three.js and React Three Fiber.</p>
-
-    <div class="proto-wrap reveal">
-      <div class="proto-bar">
-        <span>GrateTogether&nbsp;&mdash; 3D Prototype</span>
-        <a href="https://doost44.github.io/3D-Cheese-Grater/" target="_blank" rel="noopener">Open Full Screen &nearr;</a>
-      </div>
-      <iframe
-        src="https://doost44.github.io/3D-Cheese-Grater/"
-        loading="lazy"
-        title="GrateTogether Interactive 3D Prototype"
-        allow="accelerometer; gyroscope"
-      ></iframe>
-    </div>
-  </div>
-</section>
-
-<hr class="divider" />
-
-<!-- ========== SECTION 6: FEEDBACK ========== -->
-<section class="section-pad" id="feedback">
-  <div class="wrap">
-    <p class="label reveal">06 &mdash; Stakeholder Feedback &amp; Refinement</p>
-    <h2 class="reveal">Testing with real people</h2>
-    <p class="body-text reveal">Feedback methods from A3 were carried out&nbsp;&mdash; showing the prototype to real users and collecting structured feedback.</p>
-
-    <div class="placeholder reveal">
-      <h4>Your Feedback Content Goes Here</h4>
-      <p>Add your stakeholder feedback methods, key quotes, observations, and the specific design changes you made in response. Include before/after comparisons of refinements.</p>
-    </div>
-
-    <div style="margin-top:2rem; color:var(--text-muted); font-size:0.88rem;" class="reveal">
-      <strong style="color:var(--text);">Planned sub-sections:</strong>
-      <ul style="list-style:disc; padding-left:1.25rem; margin-top:0.5rem; line-height:2;">
-        <li>Feedback methods used (for S1 and S2)</li>
-        <li>Key findings with quotes and data</li>
-        <li>Changes made in response (before/after of specific refinements)</li>
-        <li>Peer review insights and how they shaped the A3 &rarr; A4 iteration</li>
+    <!-- ===== REFERENCES ===== -->
+    <section class="section" data-reveal-group>
+      <p class="section-label" data-reveal>References</p>
+      <ul class="ref-list" data-reveal>
+        <li>Amir, M. (2024). <em>Kids in the kitchen: Parent reports of children's experiences and injury risk in the kitchen</em> (Master's thesis, University of Guelph). The Atrium. <a href="https://hdl.handle.net/10214/28587" target="_blank" rel="noopener">hdl.handle.net/10214/28587</a></li>
+        <li>Friedman, B., &amp; Hendry, D. G. (2019). <em>Value sensitive design: Shaping technology with moral imagination</em>. MIT Press. <a href="https://doi.org/10.7551/mitpress/7585.001.0001" target="_blank" rel="noopener">doi.org/10.7551/mitpress/7585.001.0001</a></li>
+        <li>Schultz-Bergin, M. (2021). "Designing for Values" in <em>The Primacy of the Public: Ethical Design for Technology</em>. MSL Academic Endeavors eBooks.</li>
+        <li>Van de Poel, I. (2013). "Translating Values into Design Requirements." In Michelfelder, D., McCarthy, N., &amp; Goldberg, D. (Eds.), <em>Philosophy and Engineering: Reflections on Practice, Principles and Process</em>. Springer.</li>
       </ul>
-    </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+      <div class="footer-inner">
+        <span>Charlie Cilla — GBDA 306, 2026</span>
+        <a href="https://doost44.github.io/3D-Cheese-Grater/" target="_blank" rel="noopener">3D Prototype on GitHub &nearr;</a>
+      </div>
+    </footer>
+
   </div>
-</section>
-
-<hr class="divider" />
-
-<!-- ========== SECTION 7: REFLECTION ========== -->
-<section class="section-pad" id="reflection">
-  <div class="wrap">
-    <p class="label reveal">07 &mdash; Reflection</p>
-    <h2 class="reveal">What I learned</h2>
-
-    <div class="reflection-grid" style="margin-top:2rem;">
-      <div class="card reveal">
-        <div class="reflection-num">01</div>
-        <h3>Stakeholder Feedback Process</h3>
-        <p class="card__desc">Describe your methods and how specific feedback shaped the final prototype. Include quotes and data.</p>
-      </div>
-      <div class="card reveal">
-        <div class="reflection-num">02</div>
-        <h3>How Peer Review Shaped My Redesign</h3>
-        <p class="card__desc">Reflect on how seeing peers' work and hearing their feedback shaped your redesign from A3 to A4.</p>
-      </div>
-      <div class="card reveal">
-        <div class="reflection-num">03</div>
-        <h3>My 'Aha' Moment</h3>
-        <p class="card__desc">What was your most meaningful insight while working through the VSD process?</p>
-      </div>
-      <div class="card reveal">
-        <div class="reflection-num">04</div>
-        <h3>If I Started Over</h3>
-        <p class="card__desc">Knowing what you know now, what different design directions would you take and why?</p>
-      </div>
-      <div class="card reveal">
-        <div class="reflection-num">05</div>
-        <h3>One Thing I'll Take Forward</h3>
-        <p class="card__desc">Describe one learning from this course you plan to use in the future.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider" />
-
-<!-- ========== REFERENCES ========== -->
-<section class="section-pad">
-  <div class="wrap">
-    <p class="label reveal">References</p>
-    <ul class="ref-list reveal">
-      <li>Amir, M. (2024). <em>Kids in the kitchen: Parent reports of children's experiences and injury risk in the kitchen</em> (Master's thesis, University of Guelph). The Atrium. <a href="https://hdl.handle.net/10214/28587" target="_blank" rel="noopener">hdl.handle.net/10214/28587</a></li>
-      <li>Friedman, B., &amp; Hendry, D. G. (2019). <em>Value sensitive design: Shaping technology with moral imagination</em>. MIT Press. <a href="https://doi.org/10.7551/mitpress/7585.001.0001" target="_blank" rel="noopener">doi.org/10.7551/mitpress/7585.001.0001</a></li>
-      <li>Schultz-Bergin, M. (2021). "Designing for Values" in <em>The Primacy of the Public: Ethical Design for Technology</em>. MSL Academic Endeavors eBooks.</li>
-      <li>Van de Poel, I. (2013). "Translating Values into Design Requirements." In Michelfelder, D., McCarthy, N., &amp; Goldberg, D. (Eds.), <em>Philosophy and Engineering: Reflections on Practice, Principles and Process</em>. Springer.</li>
-    </ul>
-  </div>
-</section>
-
-<!-- ========== FOOTER ========== -->
-<footer>
-  <div class="wrap">
-    <span>Charlie Cilla &mdash; GBDA 306, 2026</span>
-    <a href="https://doost44.github.io/3D-Cheese-Grater/" target="_blank" rel="noopener">3D Prototype on GitHub &nearr;</a>
-  </div>
-</footer>
+</div>
 
 <!-- ========== JS ========== -->
 <script>
-  // Mobile nav toggle
-  document.querySelector('.nav-toggle').addEventListener('click', function () {
-    document.getElementById('navLinks').classList.toggle('open');
-  });
-  // Close nav on link click (mobile)
-  document.querySelectorAll('.nav-links a').forEach(function (a) {
-    a.addEventListener('click', function () {
-      document.getElementById('navLinks').classList.remove('open');
-    });
+// ===== SIDEBAR ACTIVE STATE =====
+(function() {
+  var links = document.querySelectorAll('.sidebar-nav a');
+  var sections = [];
+  links.forEach(function(a) {
+    var id = a.getAttribute('href').replace('#','');
+    var el = document.getElementById(id);
+    if (el) sections.push({ el: el, link: a });
   });
 
-  // Scroll reveal via IntersectionObserver
-  var reveals = document.querySelectorAll('.reveal');
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+  function updateActive() {
+    var scrollY = window.scrollY + 120;
+    var current = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].el.offsetTop <= scrollY) current = sections[i];
+    }
+    links.forEach(function(a) { a.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+  window.addEventListener('scroll', updateActive);
+  updateActive();
+})();
+
+// ===== MOBILE NAV =====
+document.getElementById('mobileToggle').addEventListener('click', function() {
+  var sb = document.getElementById('sidebar');
+  if (sb.style.display === 'flex') {
+    sb.style.display = '';
+  } else {
+    sb.style.display = 'flex';
+    sb.style.position = 'fixed';
+    sb.style.zIndex = '300';
+    sb.style.background = '#fff';
+  }
+});
+
+// ===== SCROLL REVEAL =====
+document.querySelectorAll('[data-reveal-group]').forEach(function(group) {
+  var children = group.querySelectorAll('[data-reveal]');
+  children.forEach(function(el, i) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ' + (i * 0.07) + 's, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ' + (i * 0.07) + 's';
+  });
+});
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('[data-reveal]').forEach(function(el) { revealObs.observe(el); });
+
+// ===== INTERACTIVE 3D LINE ART — Three.js Post-Processed Cheese Grater =====
+(function() {
+  // ── Load Three.js ──
+  var threeLoaded = false;
+  var threeScript = document.createElement('script');
+  threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+  threeScript.onload = function() { threeLoaded = true; initAllCards(); };
+  threeScript.onerror = function() { initAllCardsFallback(); };
+  document.head.appendChild(threeScript);
+
+  var cards = document.querySelectorAll('.art-card');
+
+  // ── Color palettes per variant ──
+  function getColors(variant) {
+    if (variant === 'safe')
+      return { main: ['#22c55e','#4ade80','#86efac','#16a34a'], accent: '#15803d', dim: '#bbf7d0', hex: 0x22c55e };
+    if (variant === 'pro')
+      return { main: ['#ef4444','#f87171','#fca5a5','#dc2626'], accent: '#b91c1c', dim: '#fecaca', hex: 0xef4444 };
+    if (variant === 'dual')
+      return { main: ['#22c55e','#4ade80','#ef4444','#f87171','#fbbf24','#f59e0b'], accent: '#22c55e', dim: '#fef3c7', hex: 0xfbbf24 };
+    return { main: ['#3b82f6','#60a5fa','#93c5fd','#2563eb','#1d4ed8'], accent: '#1e40af', dim: '#bfdbfe', hex: 0x3b82f6 };
+  }
+
+  // ── Build procedural grater model ──
+  function buildGrater(variant) {
+    var group = new THREE.Group();
+    var BW = 1.6, TW = BW * 0.48, BH = BW * 2.2, BD = 0.9;
+    var BEVEL = 0.04;
+    var isSafe = variant === 'safe' || variant === 'dual';
+    var isPro = variant === 'pro' || variant === 'dual';
+    var bodyColor = 0xe8e4df, steelColor = 0xb0b8c0, binColor = 0xd4ecf7;
+    var baseColor = 0xc0bdb8, handleColor = 0x525252, seamColor = 0xb5b0a9;
+    var accentColor = variant === 'safe' ? 0x22c55e : variant === 'pro' ? 0xef4444 : variant === 'dual' ? 0xfbbf24 : 0x3b82f6;
+
+    // Body — tapered trapezoid via ExtrudeGeometry
+    var shape = new THREE.Shape();
+    var bw = BW / 2, tw = TW / 2, r = 0.08;
+    shape.moveTo(-bw + r, 0);
+    shape.lineTo(bw - r, 0);
+    shape.quadraticCurveTo(bw, 0, bw, r);
+    shape.lineTo(tw, BH - r);
+    shape.quadraticCurveTo(tw, BH, tw - r, BH);
+    shape.lineTo(-tw + r, BH);
+    shape.quadraticCurveTo(-tw, BH, -tw, BH - r);
+    shape.lineTo(-bw, r);
+    shape.quadraticCurveTo(-bw, 0, -bw + r, 0);
+    var bodyGeo = new THREE.ExtrudeGeometry(shape, { depth: BD, bevelEnabled: true, bevelSize: BEVEL, bevelThickness: BEVEL, bevelSegments: 3 });
+    bodyGeo.translate(0, 0, -BD / 2);
+    var bodyMat = new THREE.MeshPhysicalMaterial({ color: bodyColor, roughness: 0.55, metalness: 0.02, clearcoat: 0.12 });
+    var body = new THREE.Mesh(bodyGeo, bodyMat);
+    body.position.y = 0.12;
+    group.add(body);
+
+    // Base platform
+    var baseMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(BW + 0.16, 0.1, BD + 0.16),
+      new THREE.MeshPhysicalMaterial({ color: baseColor, roughness: 0.78, metalness: 0.05 })
+    );
+    baseMesh.position.y = 0.06;
+    baseMesh.userData.part = 'base';
+    group.add(baseMesh);
+
+    // Rubber foot
+    var foot = new THREE.Mesh(
+      new THREE.BoxGeometry(BW + 0.22, 0.008, BD + 0.22),
+      new THREE.MeshStandardMaterial({ color: 0x444444, roughness: 0.95 })
+    );
+    foot.position.y = 0.004;
+    foot.userData.part = 'base';
+    group.add(foot);
+
+    // Seam lip
+    var lip = new THREE.Mesh(
+      new THREE.BoxGeometry(BW + 0.06, 0.01, BD + 0.06),
+      new THREE.MeshStandardMaterial({ color: seamColor, roughness: 0.6 })
+    );
+    lip.position.y = 0.115;
+    group.add(lip);
+
+    // Top funnel
+    var funnelR = TW * 0.44;
+    var funnelH = 0.28;
+    var funnel = new THREE.Mesh(
+      new THREE.CylinderGeometry(funnelR * 0.8, funnelR * 1.2, funnelH, 32),
+      new THREE.MeshPhysicalMaterial({ color: bodyColor, roughness: 0.5, metalness: 0.04 })
+    );
+    funnel.position.set(0, BH + 0.12 + funnelH / 2, -0.02);
+    group.add(funnel);
+
+    // Funnel rim
+    var rim = new THREE.Mesh(
+      new THREE.TorusGeometry(funnelR * 0.8, 0.022, 12, 32),
+      new THREE.MeshPhysicalMaterial({ color: 0xaaa8a3, roughness: 0.35, metalness: 0.18 })
+    );
+    rim.position.set(0, BH + 0.12 + funnelH - 0.008, -0.02);
+    rim.rotation.x = Math.PI / 2;
+    group.add(rim);
+
+    // Funnel inner throat
+    var throat = new THREE.Mesh(
+      new THREE.CylinderGeometry(funnelR * 0.5, funnelR * 0.72, funnelH * 0.75, 24),
+      new THREE.MeshStandardMaterial({ color: 0x6a6a6a, roughness: 0.65, metalness: 0.12, side: THREE.BackSide })
+    );
+    throat.position.set(0, BH + 0.12 + funnelH / 2 + 0.03, -0.02);
+    group.add(throat);
+
+    // Control panel (front upper)
+    var panel = new THREE.Mesh(
+      new THREE.BoxGeometry(BW * 0.42, 0.2, 0.014),
+      new THREE.MeshPhysicalMaterial({ color: 0x2a2a2a, roughness: 0.18, metalness: 0.12 })
+    );
+    panel.position.set(0, BH * 0.72 + 0.12, BD / 2 + BEVEL);
+    group.add(panel);
+
+    // Mode indicator dot
+    var dot = new THREE.Mesh(
+      new THREE.CircleGeometry(0.035, 16),
+      new THREE.MeshStandardMaterial({ color: accentColor, emissive: accentColor, emissiveIntensity: 0.6 })
+    );
+    dot.position.set(-0.11, BH * 0.72 + 0.14, BD / 2 + BEVEL + 0.008);
+    dot.userData.part = 'front';
+    group.add(dot);
+
+    // Grater plate (stainless steel front face)
+    var plateH = BH * 0.42;
+    var plateGeo = new THREE.BoxGeometry(BW * 0.6, plateH, 0.018);
+    var plateMat = new THREE.MeshPhysicalMaterial({ color: steelColor, roughness: 0.18, metalness: 0.92, clearcoat: 0.25 });
+    var plate = new THREE.Mesh(plateGeo, plateMat);
+    plate.position.set(0, BH * 0.35 + 0.12, BD / 2 + BEVEL + 0.003);
+    plate.userData.part = 'front';
+    group.add(plate);
+
+    // Grater holes on the plate
+    var holeGroup = new THREE.Group();
+    holeGroup.position.set(0, BH * 0.35 + 0.12, BD / 2 + BEVEL + 0.014);
+    var hRows = 12, hCols = 8;
+    var holeMat = new THREE.MeshStandardMaterial({ color: 0x1e1e1e, metalness: 0.4, roughness: 0.5 });
+    for (var hr = 0; hr < hRows; hr++) {
+      var xOff = (hr % 2) * ((BW * 0.48) / (hCols - 1)) * 0.5;
+      for (var hc = 0; hc < hCols; hc++) {
+        var hx = (hc / (hCols - 1) - 0.5) * BW * 0.48 + xOff;
+        var hy = (hr / (hRows - 1) - 0.5) * plateH * 0.8;
+        if (Math.abs(hx) > BW * 0.25) continue;
+        var hSize = 0.02 + ((hr * hCols + hc) % 5) * 0.003;
+        var hole = new THREE.Mesh(new THREE.CircleGeometry(hSize, 6), holeMat);
+        hole.position.set(hx, hy, 0);
+        holeGroup.add(hole);
+      }
+    }
+    holeGroup.userData.part = 'front';
+    group.add(holeGroup);
+
+    // Shutter (safe mode) or open plate (pro mode)
+    if (isSafe) {
+      var shutterMat = new THREE.MeshPhysicalMaterial({ color: 0xd2d2d0, roughness: 0.48, metalness: 0.06 });
+      var shutter = new THREE.Mesh(
+        new THREE.BoxGeometry(BW * 0.63, plateH + 0.04, 0.032),
+        shutterMat
+      );
+      shutter.position.set(0, BH * 0.35 + 0.12, BD / 2 + BEVEL + 0.02);
+      group.add(shutter);
+
+      // Shutter rail guides
+      [-1, 1].forEach(function(s) {
+        var rail = new THREE.Mesh(
+          new THREE.BoxGeometry(0.022, plateH + 0.08, 0.042),
+          new THREE.MeshStandardMaterial({ color: 0x7a7a7a, roughness: 0.4, metalness: 0.15 })
+        );
+        rail.position.set(s * BW * 0.32, BH * 0.35 + 0.12, BD / 2 + BEVEL + 0.02);
+        group.add(rail);
+      });
+
+      // Shutter slot windows
+      for (var si = 0; si < 7; si++) {
+        var sy = (si / 6 - 0.5) * plateH * 0.72;
+        var slot = new THREE.Mesh(
+          new THREE.BoxGeometry(BW * 0.35, 0.025, 0.04),
+          new THREE.MeshStandardMaterial({ color: 0x181818, metalness: 0.25, roughness: 0.5 })
+        );
+        slot.position.set(0, BH * 0.35 + 0.12 + sy, BD / 2 + BEVEL + 0.037);
+        group.add(slot);
+      }
+
+      // Accent stripe on shutter
+      var stripe = new THREE.Mesh(
+        new THREE.BoxGeometry(BW * 0.48, 0.022, 0.006),
+        new THREE.MeshStandardMaterial({ color: accentColor, emissive: accentColor, emissiveIntensity: 0.3 })
+      );
+      stripe.position.set(0, BH * 0.35 + 0.12 + plateH / 2 + 0.03, BD / 2 + BEVEL + 0.037);
+      stripe.userData.part = 'pusher';
+      group.add(stripe);
+
+      // Pusher rod and grip
+      var pusherRod = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.035, 0.035, BH * 0.5, 12),
+        new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.45, metalness: 0.25 })
+      );
+      pusherRod.position.set(0, BH + 0.08 + 0.12, -0.02);
+      pusherRod.userData.part = 'pusher';
+      group.add(pusherRod);
+
+      var grip = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.13, 0.11, 0.1, 20),
+        new THREE.MeshPhysicalMaterial({ color: handleColor, roughness: 0.65, metalness: 0.08 })
+      );
+      grip.position.set(0, BH + 0.08 + 0.12 + BH * 0.25 + 0.04, -0.02);
+      grip.userData.part = 'pusher';
+      group.add(grip);
+
+      // Safe mode green triangles
+      [0, -0.14, -0.28].forEach(function(yOff) {
+        var tri = new THREE.Mesh(
+          new THREE.CircleGeometry(0.022, 3),
+          new THREE.MeshStandardMaterial({ color: 0x34c759, emissive: 0x34c759, emissiveIntensity: 0.45, side: THREE.DoubleSide })
+        );
+        tri.position.set(0, BH * 0.82 + 0.12 + yOff, BD / 2 + BEVEL + 0.035);
+        tri.userData.part = 'pusher';
+        group.add(tri);
+      });
+    }
+
+    if (isPro && variant !== 'dual') {
+      // Accent stripe directly on the plate frame top
+      var proStripe = new THREE.Mesh(
+        new THREE.BoxGeometry(BW * 0.48, 0.022, 0.006),
+        new THREE.MeshStandardMaterial({ color: accentColor, emissive: accentColor, emissiveIntensity: 0.3 })
+      );
+      proStripe.position.set(0, BH * 0.35 + 0.12 + plateH / 2 + 0.015, BD / 2 + BEVEL + 0.014);
+      proStripe.userData.part = 'front';
+      group.add(proStripe);
+    }
+
+    // Plate frame border
+    var frameParts = [
+      [0, plateH / 2 + 0.008, BW * 0.62, 0.016],
+      [0, -plateH / 2 - 0.008, BW * 0.62, 0.016],
+      [-BW * 0.31 - 0.005, 0, 0.012, plateH + 0.02],
+      [BW * 0.31 + 0.005, 0, 0.012, plateH + 0.02]
+    ];
+    frameParts.forEach(function(p) {
+      var fm = new THREE.Mesh(
+        new THREE.PlaneGeometry(p[2], p[3]),
+        new THREE.MeshStandardMaterial({ color: 0x8a8a8a, roughness: 0.4, metalness: 0.5 })
+      );
+      fm.position.set(p[0], BH * 0.35 + 0.12 + p[1], BD / 2 + BEVEL + 0.013);
+      fm.userData.part = 'front';
+      group.add(fm);
+    });
+
+    // Collection bin (transparent box)
+    var binH = BH * 0.25;
+    var bin = new THREE.Mesh(
+      new THREE.BoxGeometry(BW * 0.56, binH, 0.32),
+      new THREE.MeshPhysicalMaterial({ color: binColor, transparent: true, opacity: 0.25, roughness: 0.08, transmission: 0.7, thickness: 0.8 })
+    );
+    bin.position.set(0, binH / 2 + 0.12, BD / 2 + 0.13);
+    group.add(bin);
+
+    // Bin rim
+    var binRim = new THREE.Mesh(
+      new THREE.BoxGeometry(BW * 0.58, 0.025, 0.34),
+      new THREE.MeshPhysicalMaterial({ color: 0x99cccc, roughness: 0.22, metalness: 0.1 })
+    );
+    binRim.position.set(0, binH + 0.12, BD / 2 + 0.13);
+    group.add(binRim);
+
+    // Seam lines on body
+    var seamMat = new THREE.MeshStandardMaterial({ color: seamColor, roughness: 0.5, metalness: 0.05 });
+    var seam1 = new THREE.Mesh(new THREE.PlaneGeometry(BW * 0.7, 0.005), seamMat);
+    seam1.position.set(0, 0.12 + BH * 0.52, BD / 2 + BEVEL + 0.002);
+    group.add(seam1);
+    var seam2 = new THREE.Mesh(new THREE.PlaneGeometry(BW * 0.85, 0.004), seamMat);
+    seam2.position.set(0, 0.12 + BH * 0.12, BD / 2 + BEVEL + 0.002);
+    group.add(seam2);
+
+    // Center the model vertically
+    group.position.y = -(BH / 2 + 0.12);
+
+    return group;
+  }
+
+  // ── Create Three.js scene for a card ──
+  function createScene(variant, w, h) {
+    var scene = new THREE.Scene();
+    // Transparent background — no scene.background
+
+    // Lighting: ambient + key + fill
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    var key = new THREE.DirectionalLight(0xffffff, 1.4);
+    key.position.set(5, 8, 5);
+    scene.add(key);
+    var fill = new THREE.DirectionalLight(0xc0d8ff, 0.5);
+    fill.position.set(-4, 4, -3);
+    scene.add(fill);
+    var warm = new THREE.PointLight(0xfff5e0, 0.4);
+    warm.position.set(1, 3, 4);
+    scene.add(warm);
+    var rimLight = new THREE.DirectionalLight(0xe0e8ff, 0.35);
+    rimLight.position.set(0, 5, -5);
+    scene.add(rimLight);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xd5d0ca, 0.35));
+
+    var model = buildGrater(variant);
+    scene.add(model);
+
+    var camera = new THREE.PerspectiveCamera(34, w / h, 0.1, 100);
+    camera.position.set(4.5, 2.8, 5.5);
+    camera.lookAt(0, 0.3, 0);
+
+    return { scene: scene, camera: camera, model: model };
+  }
+
+  // ── GLSL Line Art Shader ──
+  var LINE_VERT = [
+    'uniform vec3 uMeshColor;',
+    'varying vec3 vColor;',
+    'varying vec4 vClipPos;',
+    'varying vec3 vNormal;',
+    'void main() {',
+    '  vColor = uMeshColor;',
+    '  vNormal = normalize(normalMatrix * normal);',
+    '  vec4 mvPos = modelViewMatrix * vec4(position, 1.0);',
+    '  vClipPos = projectionMatrix * mvPos;',
+    '  gl_Position = vClipPos;',
+    '}'
+  ].join('\n');
+
+  var LINE_FRAG = [
+    'varying vec3 vColor;',
+    'varying vec4 vClipPos;',
+    'varying vec3 vNormal;',
+    'uniform float uColoredSpacing;',
+    'uniform float uGreySpacing;',
+    'uniform float uColoredLineWidth;',
+    'uniform float uGreyLineWidth;',
+    'uniform vec2 uResolution;',
+    'uniform vec3 uLightDir;',
+    'uniform float uGreyOpacity;',
+    'uniform float uColorOpacityMin;',
+    'uniform float uColorOpacityMax;',
+    'uniform vec3 uVariantColor;',
+    'uniform float uTime;',
+    'uniform float uForceAccent;',
+    'void main() {',
+    '  vec2 ndc = vClipPos.xy / vClipPos.w;',
+    '  vec2 screenPos = (ndc * 0.5 + 0.5) * uResolution;',
+    '  float isCol = uForceAccent;',
+    '  float spacing = mix(uGreySpacing, uColoredSpacing, isCol);',
+    // Vary line width over time: oscillate ±0.4 around base
+    '  float baseW = mix(uGreyLineWidth, uColoredLineWidth, isCol);',
+    '  float colIndex = floor(screenPos.x / spacing);',
+    '  float pulse = sin(uTime * 1.5 + colIndex * 0.3) * 0.4;',
+    '  float lineW = baseW + pulse * isCol;',
+    '  lineW = max(lineW, 0.4);',
+    '  float cx = mod(screenPos.x, spacing);',
+    '  if (cx > lineW) discard;',
+    '  vec3 greyCol = vec3(0.72);',
+    '  float facing = max(0.0, dot(vNormal, normalize(uLightDir)));',
+    '  float shadowFactor = 1.0 - facing;',
+    '  float colorAlpha = uColorOpacityMin + shadowFactor * (uColorOpacityMax - uColorOpacityMin);',
+    // Use variant override color instead of material color
+    '  vec3 lineColor = mix(greyCol, uVariantColor, isCol);',
+    '  float opacity = mix(uGreyOpacity, colorAlpha, isCol);',
+    '  gl_FragColor = vec4(lineColor, opacity);',
+    '}'
+  ].join('\n');
+
+  // ── Apply line shader to all meshes in a group ──
+  // variant: 'safe' or 'pro' — determines which tagged parts get colored
+  // variantColor: THREE.Color for the accent (green/red)
+  // timeUniform: shared { value: 0 } object updated each frame
+  function applyLineShader(group, resolution, variant, variantColor, timeUniform) {
+    var lightDir = new THREE.Vector3(0.3, 0.8, 0.6).normalize();
+    // safe: pusher parts get colored; pro: front parts get colored
+    var accentGroup = variant === 'safe' ? 'pusher' : 'front';
+    group.traverse(function(obj) {
+      if (!obj.isMesh) return;
+      var origMat = obj.material;
+      var meshColor = origMat.color ? origMat.color.clone() : new THREE.Color(0x808080);
+      if (origMat.emissive) {
+        var ec = origMat.emissive;
+        if (ec.r + ec.g + ec.b > 0.1) meshColor = ec.clone();
+      }
+      // Check part tag — also walk up parent chain for groups (e.g. holeGroup children)
+      var part = obj.userData.part;
+      if (!part && obj.parent && obj.parent.userData.part) part = obj.parent.userData.part;
+      var isAccent = (part === accentGroup || part === 'base') ? 1.0 : 0.0;
+
+      obj.material = new THREE.ShaderMaterial({
+        vertexShader: LINE_VERT,
+        fragmentShader: LINE_FRAG,
+        uniforms: {
+          uMeshColor: { value: meshColor },
+          uColoredSpacing: { value: 2.5 },
+          uGreySpacing: { value: 3.5 },
+          uColoredLineWidth: { value: 1.5 },
+          uGreyLineWidth: { value: 0.8 },
+          uResolution: { value: resolution },
+          uLightDir: { value: lightDir },
+          uGreyOpacity: { value: 0.25 },
+          uColorOpacityMin: { value: 0.55 },
+          uColorOpacityMax: { value: 1.0 },
+          uVariantColor: { value: variantColor },
+          uTime: timeUniform,
+          uForceAccent: { value: isAccent }
+        },
+        transparent: true,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+    });
+  }
+
+  // ── Initialize cards with Three.js ──
+  function initAllCards() {
+    if (!threeLoaded) return;
+    cards.forEach(function(card) { initCard(card); });
+  }
+
+  function initCard(card) {
+    var canvas = card.querySelector('canvas');
+    var variant = card.getAttribute('data-art');
+    var dpr = window.devicePixelRatio || 1;
+
+    // Variant accent colors: green for safe, red for pro
+    var VARIANT_COLORS = {
+      safe: new THREE.Color(0x22c55e),
+      pro: new THREE.Color(0xef4444)
+    };
+    var variantColor = VARIANT_COLORS[variant] || new THREE.Color(0x3b82f6);
+
+    // Rotation state — cursor-proximity driven
+    var rotY = 0.5;
+    var rotX = 0.15;
+    var targetRotY = 0;
+    var targetRotX = 0;
+    var autoRotateBase = 0; // accumulates auto-rotation offset
+    var isTracking = false;
+    var resumeTimeout = null;
+    var MAX_YAW = 0.44;   // ±25 degrees
+    var MAX_PITCH = 0.26;  // ±15 degrees
+    var LERP = 0.06;
+
+    var rect = canvas.getBoundingClientRect();
+    var cw = Math.floor(rect.width);
+    var ch = Math.floor(rect.height);
+
+    // Create scene + model (camera pushed back for smaller model in frame)
+    var sceneData, renderer;
+    try {
+      sceneData = createScene(variant, cw, ch);
+      // Push camera further back
+      sceneData.camera.position.set(6.5, 3.8, 7.5);
+      sceneData.camera.lookAt(0, 0.3, 0);
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+      renderer.setSize(cw, ch);
+      renderer.setPixelRatio(dpr);
+      renderer.setClearColor(0xF0EFED, 1.0);
+      renderer.toneMapping = THREE.NoToneMapping;
+    } catch (e) {
+      console.error('WebGL init failed for', variant, e);
+      initCardFallback(card);
+      return;
+    }
+
+    // Apply GLSL line art shader to all meshes
+    var resolution = new THREE.Vector2(cw * dpr, ch * dpr);
+    var timeUniform = { value: 0 };
+    try {
+      applyLineShader(sceneData.model, resolution, variant, variantColor, timeUniform);
+      renderer.compile(sceneData.scene, sceneData.camera);
+    } catch (e) {
+      console.error('Shader failed for', variant, e);
+    }
+
+    // Cursor-proximity tracking on whole page
+    window.addEventListener('mousemove', function(e) {
+      var r = card.getBoundingClientRect();
+      var cardCX = r.left + r.width / 2;
+      var cardCY = r.top + r.height / 2;
+      var dx = e.clientX - cardCX;
+      var dy = e.clientY - cardCY;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var maxDist = Math.max(r.width, r.height) + 200;
+
+      if (dist < maxDist) {
+        // Influence: full inside card, fading to 0 at maxDist
+        var influence = 1.0 - Math.max(0, dist - r.width * 0.5) / 200;
+        influence = Math.max(0, Math.min(1, influence));
+        var nx = dx / (r.width * 0.5);
+        var ny = dy / (r.height * 0.5);
+        nx = Math.max(-1, Math.min(1, nx));
+        ny = Math.max(-1, Math.min(1, ny));
+        targetRotY = nx * MAX_YAW * influence;
+        targetRotX = ny * MAX_PITCH * influence;
+        isTracking = true;
+        if (resumeTimeout) { clearTimeout(resumeTimeout); resumeTimeout = null; }
+      } else {
+        if (isTracking) {
+          isTracking = false;
+          targetRotY = 0;
+          targetRotX = 0;
+          resumeTimeout = setTimeout(function() { resumeTimeout = null; }, 3000);
+        }
       }
     });
-  }, { threshold: 0.12 });
-  reveals.forEach(function (el) { observer.observe(el); });
+
+    canvas.addEventListener('mouseleave', function() {
+      // Will be handled by the page-level mousemove distance check
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Auto-rotate base (always accumulates, used when not tracking)
+      autoRotateBase += 0.003;
+
+      // Lerp toward target
+      if (isTracking) {
+        rotY += (targetRotY - rotY) * LERP;
+        rotX += (targetRotX - rotX) * LERP;
+      } else {
+        // Ease back to auto-rotate
+        rotY += (0 - rotY) * LERP;
+        rotX += (0 - rotX) * LERP;
+      }
+
+      sceneData.model.rotation.y = autoRotateBase + rotY;
+      sceneData.model.rotation.x = 0.15 + rotX;
+
+      timeUniform.value = performance.now() * 0.001;
+      renderer.render(sceneData.scene, sceneData.camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', function() {
+      var newRect = canvas.getBoundingClientRect();
+      cw = Math.floor(newRect.width);
+      ch = Math.floor(newRect.height);
+      renderer.setSize(cw, ch);
+      sceneData.camera.aspect = cw / ch;
+      sceneData.camera.updateProjectionMatrix();
+      resolution.set(cw * dpr, ch * dpr);
+    });
+  }
+
+  // ── Fallback: original procedural line art (no Three.js) ──
+  function initAllCardsFallback() {
+    cards.forEach(function(card) { initCardFallback(card); });
+  }
+
+  function initCardFallback(card) {
+    var canvas = card.querySelector('canvas');
+    var ctx = canvas.getContext('2d');
+    var variant = card.getAttribute('data-art');
+    var palette = getColors(variant);
+    var mouseX = -1, mouseY = -1;
+    var lines = [];
+    var dpr = window.devicePixelRatio || 1;
+    var seed = Math.random() * 1000;
+
+    function getSegments(nx) {
+      var segs = [];
+      var bodyTopY = 0.08, bodyBotY = 0.82, binTopY = 0.83, binBotY = 0.92;
+      var funnelTopY = 0.01, funnelBotY = 0.08;
+      var topHW = 0.26, botHW = 0.38;
+      function edge(yn) { return topHW + (botHW - topHW) * yn; }
+      function inside(yn) { var hw = edge(yn); return nx >= 0.5 - hw && nx <= 0.5 + hw; }
+
+      // Funnel
+      var ftHW = 0.26, fbHW = 0.18;
+      if (nx >= 0.5 - ftHW && nx <= 0.5 + ftHW) {
+        if (nx >= 0.5 - fbHW && nx <= 0.5 + fbHW) segs.push({ top: funnelTopY, bot: funnelBotY });
+        else { var ff = (Math.abs(nx - 0.5) - fbHW) / (ftHW - fbHW); segs.push({ top: funnelTopY, bot: funnelTopY + (funnelBotY - funnelTopY) * (1 - ff) * 0.5 }); }
+      }
+      // Body
+      if (inside(0) && inside(1)) segs.push({ top: bodyTopY, bot: bodyBotY });
+      else if (!inside(0) && inside(1)) {
+        var yE = nx < 0.5 ? (0.5 - nx - topHW) / (botHW - topHW) : (nx - 0.5 - topHW) / (botHW - topHW);
+        yE = Math.max(0, Math.min(1, yE));
+        segs.push({ top: bodyTopY + yE * (bodyBotY - bodyTopY), bot: bodyBotY });
+      }
+      // Bin
+      var binHW = botHW - 0.04;
+      if (nx >= 0.5 - binHW && nx <= 0.5 + binHW) segs.push({ top: binTopY, bot: binBotY });
+      return segs;
+    }
+
+    function resize() {
+      var rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      lines = [];
+      var w = rect.width, h = rect.height, gap = 3;
+      for (var i = 0; i < Math.floor(w / gap); i++) {
+        var x = i * gap + gap / 2, nx = x / w;
+        var segs = getSegments(nx);
+        var distC = Math.abs(nx - 0.5);
+        var col = distC < 0.08 ? palette.accent : palette.main[Math.floor(((Math.sin(i * 0.7 + seed) + 1) / 2) * palette.main.length)];
+        for (var s = 0; s < segs.length; s++) {
+          lines.push({ baseX: x, top: segs[s].top * h, bot: segs[s].bot * h, color: col, width: 1 + ((Math.sin(i * 1.3 + s) + 1) / 2) * 1.8, offsetX: 0, offsetY: 0, phase: (i + s) * 0.37, speed: 0.4 + ((Math.sin(i * 0.9) + 1) / 2) * 0.6 });
+        }
+      }
+    }
+
+    function draw() {
+      var rect = canvas.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      ctx.clearRect(0, 0, w, h);
+      var time = Date.now() * 0.001;
+      for (var i = 0; i < lines.length; i++) {
+        var l = lines[i], midY = (l.top + l.bot) / 2;
+        var dx = l.baseX - mouseX, dy = midY - mouseY, dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 70 && mouseX >= 0) { var f = (1 - dist / 70) * 22; l.offsetX += ((dx / (dist || 1)) * f - l.offsetX) * 0.12; l.offsetY += ((dy / (dist || 1)) * f * 0.3 - l.offsetY) * 0.12; }
+        else { l.offsetX *= 0.9; l.offsetY *= 0.9; }
+        var sway = Math.sin(time * l.speed + l.phase) * 1.2;
+        ctx.beginPath(); ctx.moveTo(l.baseX + l.offsetX + sway, l.top + l.offsetY * 0.5); ctx.lineTo(l.baseX + l.offsetX + sway, l.bot + l.offsetY * 0.5);
+        ctx.strokeStyle = l.color; ctx.lineWidth = l.width; ctx.lineCap = 'round'; ctx.globalAlpha = 0.6 + Math.sin(time * 0.8 + l.phase) * 0.25; ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+
+    canvas.addEventListener('mousemove', function(e) { var r = canvas.getBoundingClientRect(); mouseX = e.clientX - r.left; mouseY = e.clientY - r.top; });
+    canvas.addEventListener('mouseleave', function() { mouseX = mouseY = -1; });
+    canvas.addEventListener('touchmove', function(e) { var r = canvas.getBoundingClientRect(); mouseX = e.touches[0].clientX - r.left; mouseY = e.touches[0].clientY - r.top; });
+    canvas.addEventListener('touchend', function() { mouseX = mouseY = -1; });
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+  }
+})();
 </script>
 
 </body>
